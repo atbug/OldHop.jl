@@ -1,6 +1,7 @@
 module Hop
 
-export TightBindingModel, sethopping!, calhamiltonian, caleig, makesupercell, makecluster
+export TightBindingModel, sethopping!, addmagneticfield!, makesupercell, makecluster, calhamiltonian, caleig
+
 
 struct TightBindingModel
     "number of orbits"
@@ -42,6 +43,7 @@ function TightBindingModel(lat::Matrix{Float64}, positions::Matrix{Float64})
     TightBindingModel(size(positions, 2), lat, rlat, positions, Dict())
 end
 
+
 """
 Set hoppings for a TightBindingModel t. Hoppings are expressed as ⟨0n|H|Rm⟩,
 where R is a 3-element Vector{Int} representing lattice vector.
@@ -53,39 +55,28 @@ function sethopping!(t::TightBindingModel, n::Int, m::Int, R::Vector{Int}, hoppi
     return
 end
 
-"""
-Calculate Hamiltonian of a TightBindingModel t for a specific k point.
-k is a 3-element Vector{Float} representing k point in relative coordinate.
-"""
-function calhamiltonian(t::TightBindingModel, k::Vector{Float64})
-    @assert size(k) == (3,) "Size of k is not correct."
-    h = zeros(Complex128, (t.norbits, t.norbits))
-    for (label, hopping) in t.hoppings
-        h[label[1], label[2]] += exp(2π*im*(k⋅label[3:5]))*hopping
-    end
-    return h
-end
 
 """
-Calculate Hamiltonian of a TightBindingModel t for a specific k point.
-k is a 3-element Vector{Float} representing k point in relative coordinate.
+Add constant magnetic field in z direction for a TightBindingModel.
+
+# Arguments
+- `t::TightBindingModel`: a TightBindingModel. t has to be a cluster.
+- `B::Float64`: magnetic field in z direction. B is actually Be/h, thus
+  its unit is 1/[length]^2. e here is fundamental charge.
+  Since electron charge is -e, positive B means -z direction for electron system.
 """
-function caleig(t::TightBindingModel, k::Vector{Float64}, calegvecs::Bool=false)
-    @assert size(k) == (3,) "Size of k is not correct."
-    hamiltonian = calhamiltonian(t, k)
-    if calegvecs
-        (egvals, egvecs) = eig(hamiltonian)
-        egvals = real(egvals)
-        perm = sortperm(egvals)
-        sortedegvecs = zeros(size(egvecs))
-        for i in 1:t.norbits
-            sortedegvecs[:, i] = egvecs[:, perm[i]]
-        end
-        return (egvals[perm], sortedegvecs)
-    else
-        return sort(real(eigvals(hamiltonian)))
+function addmagneticfield!(t::TightBindingModel, B::Float64)
+    for (label, hopping) in t.hoppings
+        # landau gauge
+        absolute_position_n = t.lat*t.positions[:,label[1]]
+        absolute_position_m = t.lat*t.positions[:,label[2]]
+        t.hoppings[label] = hopping*exp(
+            im*2π*B*(absolute_position_n[2]-absolute_position_m[2])*(absolute_position_n[1]+absolute_position_m[1])/2
+        )
     end
+    return
 end
+
 
 """
 Create a supercell TightBindingModel from original TightBindingModel.
@@ -151,6 +142,42 @@ function makecluster(t::TightBindingModel)
         end
     end
     return c
+end
+
+
+"""
+Calculate Hamiltonian of a TightBindingModel t for a specific k point.
+k is a 3-element Vector{Float} representing k point in relative coordinate.
+"""
+function calhamiltonian(t::TightBindingModel, k::Vector{Float64})
+    @assert size(k) == (3,) "Size of k is not correct."
+    h = zeros(Complex128, (t.norbits, t.norbits))
+    for (label, hopping) in t.hoppings
+        h[label[1], label[2]] += exp(2π*im*(k⋅label[3:5]))*hopping
+    end
+    return h
+end
+
+
+"""
+Calculate Hamiltonian of a TightBindingModel t for a specific k point.
+k is a 3-element Vector{Float} representing k point in relative coordinate.
+"""
+function caleig(t::TightBindingModel, k::Vector{Float64}, calegvecs::Bool=false)
+    @assert size(k) == (3,) "Size of k is not correct."
+    hamiltonian = calhamiltonian(t, k)
+    if calegvecs
+        (egvals, egvecs) = eig(hamiltonian)
+        egvals = real(egvals)
+        perm = sortperm(egvals)
+        sortedegvecs = zeros(size(egvecs))
+        for i in 1:t.norbits
+            sortedegvecs[:, i] = egvecs[:, perm[i]]
+        end
+        return (egvals[perm], sortedegvecs)
+    else
+        return sort(real(eigvals(hamiltonian)))
+    end
 end
 
 end

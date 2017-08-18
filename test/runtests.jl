@@ -36,3 +36,13 @@ grapheneisolated = makecluster(graphene)
 
 @test haskey(grapheneisolated.hoppings, [1, 2, 0, 0, 0])
 @test !haskey(grapheneisolated.hoppings, [2, 1, 1, 0, 0])
+
+lat = [2 0 0.0; 0 2 0; 0 0 1]
+positions = [0.5 0.5 0.0; 0 0.5 0.0; 0 0 0.0]
+cluster = TightBindingModel(lat, positions)
+sethopping!(cluster, 1, 2, [0, 0, 0], 1.0)
+sethopping!(cluster, 1, 3, [0, 0, 0], 1.0)
+sethopping!(cluster, 2, 3, [0, 0, 0], 1.0)
+addmagneticfield!(cluster, 0.5)
+
+@test all(abs.(caleig(cluster, [0.0, 0.0, 0.0]) - [-1.73205, 0, 1.73205]) .< 1.0e-6)
