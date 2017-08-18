@@ -1,6 +1,6 @@
 module Hop
 
-export TightBindingModel, sethopping!, calhamiltonian, caleig
+export TightBindingModel, sethopping!, calhamiltonian, caleig, makesupercell, makecluster
 
 struct TightBindingModel
     "number of orbits"
@@ -24,14 +24,14 @@ Thus every lattice vector should have three components.
 Lower dimensional models should be simulated by vacuum layer.
 
 # Arguments
-- `lat::Matrix{Float64}`: Lattice vector.
+- `lat::Matrix{Float64}`: lattice vector.
   Lattice vectors should be provided as lat[:, i]
-- `positions::Matrix{Float64}`: Atom postions.
+- `positions::Matrix{Float64}`: atom postions.
   Atom positions should be provided as positions[:, i]
 """
 function TightBindingModel(lat::Matrix{Float64}, positions::Matrix{Float64})
-    @assert size(lat) == (3, 3) "Shape of lat is not correct."
-    @assert size(positions, 1) == 3 "Shape of positions is not correct."
+    @assert size(lat) == (3, 3) "Size of lat is not correct."
+    @assert size(positions, 1) == 3 "Size of positions is not correct."
     a1 = lat[:, 1]
     a2 = lat[:, 2]
     a3 = lat[:, 3]
@@ -58,8 +58,8 @@ Calculate Hamiltonian of a TightBindingModel t for a specific k point.
 k is a 3-element Vector{Float} representing k point in relative coordinate.
 """
 function calhamiltonian(t::TightBindingModel, k::Vector{Float64})
-    @assert size(k) == (3,) "k point is not in correct shape"
-    h = zeros((t.norbits, t.norbits))
+    @assert size(k) == (3,) "Size of k is not correct."
+    h = zeros(Complex128, (t.norbits, t.norbits))
     for (label, hopping) in t.hoppings
         h[label[1], label[2]] += exp(2π*im*(k⋅label[3:5]))*hopping
     end
@@ -71,6 +71,7 @@ Calculate Hamiltonian of a TightBindingModel t for a specific k point.
 k is a 3-element Vector{Float} representing k point in relative coordinate.
 """
 function caleig(t::TightBindingModel, k::Vector{Float64}, calegvecs::Bool=false)
+    @assert size(k) == (3,) "Size of k is not correct."
     hamiltonian = calhamiltonian(t, k)
     if calegvecs
         (egvals, egvecs) = eig(hamiltonian)
@@ -84,6 +85,72 @@ function caleig(t::TightBindingModel, k::Vector{Float64}, calegvecs::Bool=false)
     else
         return sort(real(eigvals(hamiltonian)))
     end
+end
+
+"""
+Create a supercell TightBindingModel from original TightBindingModel.
+
+# Arguments
+- `t::TightBindingModel`: the original TightBindingModel.
+- `ncells::Vector{Int}`: a 3-element vector representing number of unit cells
+  in three spatial directions.
+"""
+function makesupercell(t::TightBindingModel, ncells::Vector{Int})
+    @assert size(ncells) == (3,) "Size of ncells is not correct."
+    lat = [t.lat[:, 1]*ncells[1] t.lat[:, 2]*ncells[2] t.lat[:, 3]*ncells[3]]
+    positions = Vector{Float64}()
+    for k in 1:ncells[3]
+        for j in 1:ncells[2]
+            for i in 1:ncells[1]
+                for n in 1:t.norbits
+                    positions = [positions; t.positions[:, n] + [i-1, j-1, k-1]]
+                end
+            end
+        end
+    end
+    positions = reshape(positions, (3, prod(ncells)*t.norbits))
+    positions[1, :] /= ncells[1]
+    positions[2, :] /= ncells[2]
+    positions[3, :] /= ncells[3]
+    sc = TightBindingModel(lat, positions)
+
+    function getsupercellpositionindex(i, j, k, n)
+        return ((i-1) + (j-1)*ncells[1] + (k-1)*ncells[1]*ncells[2])*t.norbits + n
+    end
+
+    for k in 1:ncells[3]
+        for j in 1:ncells[2]
+            for i in 1:ncells[1]
+                for (label, hopping) in t.hoppings
+                    sethopping!(
+                        sc,
+                        getsupercellpositionindex(i, j, k, label[1]),
+                        getsupercellpositionindex(mod((i+label[3]-1),ncells[1])+1, mod((j+label[4]-1),ncells[2])+1, mod((k+label[5]-1),ncells[3])+1, label[2]),
+                        [fld(i+label[3]-1, ncells[1]), fld(j+label[4]-1, ncells[2]), fld(k+label[5]-1, ncells[3])],
+                        hopping
+                    )
+                end
+            end
+        end
+    end
+    return sc
+end
+
+
+"""
+Create cluster by cutting off all hoppings between cells.
+
+# Arguments
+- `t::TightBindingModel`: a TightBindingModel.
+"""
+function makecluster(t::TightBindingModel)
+    c = deepcopy(t)
+    for (label, hopping) in c.hoppings
+        if label[3] != 0 || label[4] != 0 || label[5] != 0
+            pop!(c.hoppings, label)
+        end
+    end
+    return c
 end
 
 end
