@@ -6,7 +6,7 @@ julia tight binding library
 
 # Examples
 
-Best tutorials are examples. Here's a few examples that can make you
+Best tutorials are examples.
 
 ## Hofstadter Butterfly
 
