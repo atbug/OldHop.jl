@@ -39,7 +39,7 @@ Bs = linspace(0, 1, nmags)
 egvals = []
 for i in 1:nmags
     hofstadter = deepcopy(c)
-    # Add magnetic field.
+    # Add magnetic field. Laudau gauge is used internally.
     addmagneticfield!(hofstadter, Bs[i])
     # Calculate eigenvalues.
     push!(egvals, caleig(hofstadter, [0.0, 0.0, 0.0]))
@@ -50,7 +50,8 @@ p = plot(size=(2000,2000))
 for i in 1:nmags
     B = zeros(size(egvals[1]))
     fill!(B, B_list[i])
-    plot!(B, egvals[i], seriestype=:scatter, markersize=1, markercolor=:black, legend=false, markeralpha=0.05, axis=nothing)
+    plot!(B, egvals[i], seriestype=:scatter, markersize=1, markercolor=:black,
+          legend=false, markeralpha=0.05, axis=nothing)
 end
 savefig("butterfly.png")
 ```
