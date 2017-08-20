@@ -109,11 +109,11 @@
 <ul>
 <li><code>lat::Matrix{Float64}</code>: lattice vector.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/5b110076dc802034d0161aad9d9dfb567cf6d065/src/Hop.jl#L20-L35' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/770b9c7aff49e92654ddefdfd97cf1afe2dcddf5/src/Hop.jl#L20-L35' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.sethopping!' href='#Hop.sethopping!'>#</a>
 <strong><code>Hop.sethopping!</code></strong> &mdash; <em>Function</em>.</p>
 <p>Set hoppings for a TightBindingModel t. Hoppings are expressed as ⟨0n|H|Rm⟩, where R is a 3-element Vector{Int} representing lattice vector.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/5b110076dc802034d0161aad9d9dfb567cf6d065/src/Hop.jl#L50-L53' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/770b9c7aff49e92654ddefdfd97cf1afe2dcddf5/src/Hop.jl#L50-L53' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.addmagneticfield!' href='#Hop.addmagneticfield!'>#</a>
 <strong><code>Hop.addmagneticfield!</code></strong> &mdash; <em>Function</em>.</p>
 <p>Add constant magnetic field in z direction for a TightBindingModel.</p>
@@ -122,7 +122,7 @@
 <li><code>t::TightBindingModel</code>: a TightBindingModel. t has to be a cluster.</li>
 <li><code>B::Float64</code>: magnetic field in z direction. B is actually Be/h, thus its unit is 1/[length]^2. e here is fundamental charge. Since electron charge is -e, positive B means -z direction for electron system.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/5b110076dc802034d0161aad9d9dfb567cf6d065/src/Hop.jl#L62-L70' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/770b9c7aff49e92654ddefdfd97cf1afe2dcddf5/src/Hop.jl#L62-L70' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.makesupercell' href='#Hop.makesupercell'>#</a>
 <strong><code>Hop.makesupercell</code></strong> &mdash; <em>Function</em>.</p>
 <p>Create a supercell TightBindingModel from original TightBindingModel.</p>
@@ -131,7 +131,7 @@
 <li><code>t::TightBindingModel</code>: the original TightBindingModel.</li>
 <li><code>ncells::Vector{Int}</code>: a 3-element vector representing number of unit cells in three spatial directions.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/5b110076dc802034d0161aad9d9dfb567cf6d065/src/Hop.jl#L84-L91' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/770b9c7aff49e92654ddefdfd97cf1afe2dcddf5/src/Hop.jl#L84-L91' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.makecluster' href='#Hop.makecluster'>#</a>
 <strong><code>Hop.makecluster</code></strong> &mdash; <em>Function</em>.</p>
 <p>Create cluster by cutting off all hoppings between cells.</p>
@@ -139,15 +139,15 @@
 <ul>
 <li><code>t::TightBindingModel</code>: a TightBindingModel.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/5b110076dc802034d0161aad9d9dfb567cf6d065/src/Hop.jl#L134-L139' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/770b9c7aff49e92654ddefdfd97cf1afe2dcddf5/src/Hop.jl#L134-L139' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calhamiltonian' href='#Hop.calhamiltonian'>#</a>
 <strong><code>Hop.calhamiltonian</code></strong> &mdash; <em>Function</em>.</p>
 <p>Calculate Hamiltonian of a TightBindingModel t for a specific k point. k is a 3-element Vector{Float} representing k point in relative coordinate.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/5b110076dc802034d0161aad9d9dfb567cf6d065/src/Hop.jl#L151-L154' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/770b9c7aff49e92654ddefdfd97cf1afe2dcddf5/src/Hop.jl#L151-L154' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.caleig' href='#Hop.caleig'>#</a>
 <strong><code>Hop.caleig</code></strong> &mdash; <em>Function</em>.</p>
 <p>Calculate Hamiltonian of a TightBindingModel t for a specific k point. k is a 3-element Vector{Float} representing k point in relative coordinate.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/5b110076dc802034d0161aad9d9dfb567cf6d065/src/Hop.jl#L165-L168' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/770b9c7aff49e92654ddefdfd97cf1afe2dcddf5/src/Hop.jl#L165-L168' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
@@ -189,5 +189,5 @@
 
 <!--
 MkDocs version : 0.16.3
-Build Date UTC : 2017-08-20 03:49:13
+Build Date UTC : 2017-08-20 03:56:52
 -->
