@@ -1,6 +1,11 @@
 # Hop.jl Documentation
 
 ```@docs
-makesupercell
 TightBindingModel
+sethopping!
+addmagneticfield!
+makesupercell
+makecluster
+calhamiltonian
+caleig
 ```
