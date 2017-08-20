@@ -1,12 +1,6 @@
 using Documenter, Hop
 
-makedocs(
-   format = :html,
-   sitename = "Hop.jl",
-   pages = [
-        "index.md",
-    ]
-)
+makedocs()
 
 deploydocs(
     repo = "github.com/mistguy/Hop.jl.git"
