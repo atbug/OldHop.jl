@@ -177,7 +177,7 @@ Calculate Hamiltonian of a TightBindingModel t for a specific k point.
 # Return
 `H(k)::Matrix{Complex128}`.
 """
-function calhamiltonian(t::TightBindingModel, k::Vector{Real})
+function calhamiltonian(t::TightBindingModel, k::Vector{<:Real})
     @assert size(k) == (3,) "Size of k is not correct."
     h = zeros(Complex128, (t.norbits, t.norbits))
     for (label, hopping) in t.hoppings
@@ -200,7 +200,7 @@ If calegvecs is true, `(egvals::Vector{Float64}, egvecs::Matrix{Complex128})`,
 otherwise just `egvals::Vector{Float64}`. Eigenvectors are stored in columns
 and eigenvalues are sorted from small to large.
 """
-function caleig(t::TightBindingModel, k::Vector{Real}, calegvecs::Bool=false)
+function caleig(t::TightBindingModel, k::Vector{<:Real}, calegvecs::Bool=false)
     @assert size(k) == (3,) "Size of k is not correct."
     hamiltonian = calhamiltonian(t, k)
     if calegvecs
