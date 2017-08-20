@@ -241,27 +241,38 @@
 <p>Generally, every tight binding model is three dimensional. Thus every lattice vector should have three components. Lower dimensional models should be simulated by vacuum layer.</p>
 <p><strong>Constructor Arguments</strong></p>
 <ul>
-<li><code>lat::Matrix{Float64}</code>: lattice vector. Lattice vectors should be provided as <code>lat[:, i]</code></li>
-<li><code>positions::Matrix{Float64}</code>: atom postions. Atom positions should be provided as <code>positions[:, i]</code></li>
+<li><code>lat::Matrix{Float64}</code>: lattice vector. Lattice vectors should be provided in columns`</li>
+<li><code>positions::Matrix{Float64}</code>: atom positions in relative coordinate. Atom positions should be provided in columns`</li>
 </ul>
 <p><strong>Fields</strong></p>
 <ul>
-<li><code>lat::Matrix{Float64}</code>: lattice vector.</li>
+<li><code>norbits::Int</code>: number of orbits.</li>
+<li><code>lat::Matrix{Float64}</code>: lattice vectors stored in columns.</li>
+<li><code>rlat::Matrix{Float64}</code>: reciprocal lattice vectors stored in columns.</li>
+<li><code>positions::Matrix{Float64}</code>: position of orbits in relative coordinate stored in columns.</li>
+<li><code>hoppings::Dict{Vector{Int64}, Complex128}</code>: hoppings.  Hopping example: [1, 1, 1, 0, 0] =&gt; 1.0+0.0im indicates hopping from orbit 1  in unit cell labeled by (1, 0, 0) to orbit 1 in home unit cell is 1.0.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/7eae6540b0a5611c81dee21cd8e17051172e0e39/src/Hop.jl#L20-L35' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/db3d0d97c8150fc2b3a9b00e9577504ff89feee8/src/Hop.jl#L20-L41' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.sethopping!' href='#Hop.sethopping!'>#</a>
 <strong><code>Hop.sethopping!</code></strong> &mdash; <em>Function</em>.</p>
-<p>Set hoppings for a TightBindingModel t. Hoppings are expressed as ⟨0n|H|Rm⟩, where R is a 3-element Vector{Int} representing lattice vector.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/7eae6540b0a5611c81dee21cd8e17051172e0e39/src/Hop.jl#L50-L53' class='documenter-source'>source</a><br></p>
+<p>Set hoppings for a TightBindingModel t. Hoppings are expressed as ⟨0n|H|Rm⟩, where R is a 3-element Vector{Int} representing lattice vector. Hamiltonian is guaranteed to be Hermitian.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>t::TightBindingModel</code>: a TightBindingModel.</li>
+<li><code>n::Int</code> and <code>m::Int</code>: label of orbits in ⟨0n|H|Rm⟩.</li>
+<li><code>R::Vector{Int}</code>: label of unit cell in ⟨0n|H|Rm⟩.</li>
+<li><code>hopping::Number</code>: value of ⟨0n|H|Rm⟩.</li>
+</ul>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/db3d0d97c8150fc2b3a9b00e9577504ff89feee8/src/Hop.jl#L56-L66' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.addmagneticfield!' href='#Hop.addmagneticfield!'>#</a>
 <strong><code>Hop.addmagneticfield!</code></strong> &mdash; <em>Function</em>.</p>
 <p>Add constant magnetic field in z direction for a TightBindingModel.</p>
 <p><strong>Arguments</strong></p>
 <ul>
-<li><code>t::TightBindingModel</code>: a TightBindingModel. t has to be a cluster.</li>
+<li><code>t::TightBindingModel</code>: a TightBindingModel.</li>
 <li><code>B::Float64</code>: magnetic field in z direction. B is actually Be/h, thus its unit is 1/[length]^2. e here is fundamental charge. Since electron charge is -e, positive B means -z direction for electron system.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/7eae6540b0a5611c81dee21cd8e17051172e0e39/src/Hop.jl#L62-L70' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/db3d0d97c8150fc2b3a9b00e9577504ff89feee8/src/Hop.jl#L75-L83' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.makesupercell' href='#Hop.makesupercell'>#</a>
 <strong><code>Hop.makesupercell</code></strong> &mdash; <em>Function</em>.</p>
 <p>Create a supercell TightBindingModel from original TightBindingModel.</p>
@@ -270,7 +281,9 @@
 <li><code>t::TightBindingModel</code>: the original TightBindingModel.</li>
 <li><code>ncells::Vector{Int}</code>: a 3-element vector representing number of unit cells in three spatial directions.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/7eae6540b0a5611c81dee21cd8e17051172e0e39/src/Hop.jl#L84-L91' class='documenter-source'>source</a><br></p>
+<p><strong>Return</strong></p>
+<p>a TightBindingModel.</p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/db3d0d97c8150fc2b3a9b00e9577504ff89feee8/src/Hop.jl#L97-L107' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.makecluster' href='#Hop.makecluster'>#</a>
 <strong><code>Hop.makecluster</code></strong> &mdash; <em>Function</em>.</p>
 <p>Create cluster by cutting off all hoppings between cells.</p>
@@ -278,15 +291,32 @@
 <ul>
 <li><code>t::TightBindingModel</code>: a TightBindingModel.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/7eae6540b0a5611c81dee21cd8e17051172e0e39/src/Hop.jl#L134-L139' class='documenter-source'>source</a><br></p>
+<p><strong>Return</strong></p>
+<p>a TightBindingModel.</p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/db3d0d97c8150fc2b3a9b00e9577504ff89feee8/src/Hop.jl#L150-L158' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calhamiltonian' href='#Hop.calhamiltonian'>#</a>
 <strong><code>Hop.calhamiltonian</code></strong> &mdash; <em>Function</em>.</p>
-<p>Calculate Hamiltonian of a TightBindingModel t for a specific k point. k is a 3-element Vector{Float} representing k point in relative coordinate.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/7eae6540b0a5611c81dee21cd8e17051172e0e39/src/Hop.jl#L151-L154' class='documenter-source'>source</a><br></p>
+<p>Calculate Hamiltonian of a TightBindingModel t for a specific k point.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>t::TightBindingModel</code>:: a TightBindingModel.</li>
+<li><code>k::Vector{Float}</code>: k point in relative coordinate.</li>
+</ul>
+<p><strong>Return</strong></p>
+<p><code>H(k)::Matrix{Complex128}</code>.</p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/db3d0d97c8150fc2b3a9b00e9577504ff89feee8/src/Hop.jl#L170-L179' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.caleig' href='#Hop.caleig'>#</a>
 <strong><code>Hop.caleig</code></strong> &mdash; <em>Function</em>.</p>
-<p>Calculate Hamiltonian of a TightBindingModel t for a specific k point. k is a 3-element Vector{Float} representing k point in relative coordinate.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/7eae6540b0a5611c81dee21cd8e17051172e0e39/src/Hop.jl#L165-L168' class='documenter-source'>source</a><br></p>
+<p>Calculate eigenvalue and eigenvectors of a TightBindingModel t for a specific k point.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>t::TightBindingModel</code>:: a TightBindingModel.</li>
+<li><code>k::Vector{Float}</code>: k point in relative coordinate.</li>
+<li><code>calegvecs::Bool</code>: whether calculate eigenvectors or not. Default to false.</li>
+</ul>
+<p><strong>return</strong></p>
+<p>If calegvecs is true, <code>(egvals::Vector{Float64}, egvecs::Matrix{Complex128})</code>, otherwise just <code>egvals::Vector{Float64}</code>. Eigenvectors are stored in columns and eigenvalues are sorted from small to large.</p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/db3d0d97c8150fc2b3a9b00e9577504ff89feee8/src/Hop.jl#L190-L202' class='documenter-source'>source</a><br></p>
                 
                   
                 
