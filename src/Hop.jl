@@ -24,11 +24,14 @@ Generally, every tight binding model is three dimensional.
 Thus every lattice vector should have three components.
 Lower dimensional models should be simulated by vacuum layer.
 
-# Arguments
+# Constructor Arguments
 - `lat::Matrix{Float64}`: lattice vector.
-  Lattice vectors should be provided as lat[:, i]
+  Lattice vectors should be provided as `lat[:, i]`
 - `positions::Matrix{Float64}`: atom postions.
-  Atom positions should be provided as positions[:, i]
+  Atom positions should be provided as `positions[:, i]`
+
+# Fields
+- `lat::Matrix{Float64}`: lattice vector.
 """
 function TightBindingModel(lat::Matrix{Float64}, positions::Matrix{Float64})
     @assert size(lat) == (3, 3) "Size of lat is not correct."
