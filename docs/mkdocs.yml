@@ -2,8 +2,9 @@ site_name:        Hop.jl
 repo_url:         https://github.com/mistguy/Hop.jl
 site_description: julia tight binding library
 site_author:      mistguy
+edit_uri: edit/master/docs/src/
 
-theme: readthedocs
+theme: material
 
 extra_css:
   - assets/Documenter.css
