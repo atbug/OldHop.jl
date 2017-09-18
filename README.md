@@ -32,15 +32,14 @@ t = TightBindingModel(lat, positions)
 sethopping!(t, 1, 1, [1, 0, 0], 1.0) # ⟨0|H|(1, 0, 0)⟩=1
 sethopping!(t, 1, 1, [0, 1, 0], 1.0) # ⟨0|H|(0, 1, 0)⟩=1
 # Create a supercell and then create a cluster from the supercell
-c = makecluster(makesupercell(t, [sz, sz, 1]))
+c = cutedge(cutedge(cutedge(makesupercell(t, [sz 0 0; 0 sz 0; 0 0 1]), 1), 2), 3)
 # List of magnetic field.
 Bs = linspace(0, 1, nmags)
 # Eigenvalues.
 egvals = []
 for i in 1:nmags
-    hofstadter = deepcopy(c)
     # Add magnetic field. Laudau gauge is used internally.
-    addmagneticfield!(hofstadter, Bs[i])
+    hofstadter = addmagneticfield(c, Bs[i])
     # Calculate eigenvalues.
     push!(egvals, caleig(hofstadter, [0.0, 0.0, 0.0]))
 end
@@ -49,7 +48,7 @@ gr()
 p = plot(size=(2000,2000))
 for i in 1:nmags
     B = zeros(size(egvals[1]))
-    fill!(B, B_list[i])
+    fill!(B, Bs[i])
     plot!(B, egvals[i], seriestype=:scatter, markersize=1, markercolor=:black,
           legend=false, markeralpha=0.05, axis=nothing)
 end

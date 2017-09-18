@@ -1,6 +1,5 @@
 language: julia
 julia:
- - nightly
  - 0.6
 after_success:
  - julia -e 'cd(Pkg.dir("Hop")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'

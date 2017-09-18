@@ -20,10 +20,10 @@ sethopping!(graphene, 2, 1, [0, 1, 0], -1.0)
 @test caleig(graphene, [0.0, 0.0, 0.0]) ≈ [-3.0, 3.0]
 @test calhamiltonian(graphene, [0.0, 0.0, 0.0]) * caleig(graphene, [0.0, 0.0, 0.0], true)[2][:, 1] ≈ -3.0*caleig(graphene, [0.0, 0.0, 0.0], true)[2][:, 1]
 
-graphene2x2 = makesupercell(graphene, [2, 2, 1])
+graphenesc = makesupercell(graphene, [2 0 0; 0 2 0; 0 0 1])
 
-@test graphene2x2.norbits == 8
-@test caleig(graphene2x2, [0.0, 0.0, 0.0]) ≈ sort!(
+@test graphenesc.norbits == 8
+@test caleig(graphenesc, [0.0, 0.0, 0.0]) ≈ sort(
     [
         caleig(graphene, [0.0, 0.0, 0.0]);
         caleig(graphene, [0.5, 0.0, 0.0]);
@@ -32,10 +32,29 @@ graphene2x2 = makesupercell(graphene, [2, 2, 1])
     ]
 )
 
-grapheneisolated = makecluster(graphene)
+graphenesc = makesupercell(graphene, [2 -1 0; 0 1 0; 0 0 1])
 
-@test haskey(grapheneisolated.hoppings, [1, 2, 0, 0, 0])
-@test !haskey(grapheneisolated.hoppings, [2, 1, 1, 0, 0])
+@test graphenesc.norbits == 4
+@test caleig(graphenesc, [0.0, 0.0, 0.0]) ≈ sort(
+    [
+        caleig(graphene, [0.0, 0.0, 0.0]);
+        caleig(graphene, [0.5, 0.0, 0.0])
+    ]
+)
+
+graphenerb = cutedge(graphene, 1)
+@test caleig(graphenerb, [0.0, 0.0, 0.5]) == caleig(graphenerb, [0.0, 0.0, 0.0])
+
+line = TightBindingModel(
+    [1.0 0 0; 0 1 0; 0 0 1],
+    [0 1/3 2/3; 0 0 0; 0 0 0]
+)
+sethopping!(line, 1, 2, [0, 0, 0], 1)
+sethopping!(line, 2, 3, [0, 0, 0], 1)
+sethopping!(line, 3, 1, [1, 0, 0], 1)
+segment = cutedge(line, 1, true)
+@test caleig(segment, [0.0, 0, 0]) ≈ [-1, -1, 2]
+
 
 lat = [2 0 0.0; 0 2 0; 0 0 1]
 positions = [0.5 0.5 0.0; 0 0.5 0.0; 0 0 0.0]
@@ -43,6 +62,6 @@ cluster = TightBindingModel(lat, positions)
 sethopping!(cluster, 1, 2, [0, 0, 0], 1.0)
 sethopping!(cluster, 1, 3, [0, 0, 0], 1.0)
 sethopping!(cluster, 2, 3, [0, 0, 0], 1.0)
-addmagneticfield!(cluster, 0.5)
+clusterm = addmagneticfield(cluster, 0.5)
 
-@test all(abs.(caleig(cluster, [0.0, 0.0, 0.0]) - [-1.73205, 0, 1.73205]) .< 1.0e-6)
+@test all(abs.(caleig(clusterm, [0.0, 0.0, 0.0]) - [-1.73205, 0, 1.73205]) .< 1.0e-6)

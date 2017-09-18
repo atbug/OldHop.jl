@@ -3,9 +3,9 @@
 ```@docs
 TightBindingModel
 sethopping!
-addmagneticfield!
-makesupercell
-makecluster
 calhamiltonian
 caleig
+addmagneticfield
+makesupercell
+cutedge
 ```
