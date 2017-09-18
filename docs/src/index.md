@@ -5,7 +5,7 @@ TightBindingModel
 sethopping!
 calhamiltonian
 caleig
-addmagneticfield
 makesupercell
 cutedge
+addmagneticfield
 ```
