@@ -181,10 +181,9 @@ function cutedge(t::TightBindingModel, dir::Int64, glueedges::Bool=false)
     r = deepcopy(t)
     for ((n, m, R), hopping) in r.hoppings
         if abs(R[dir]) > 0
-            assert abs(R[dir]) < 2  "Cutting an edge with glueedges=true is undefined for
+            @assert abs(R[dir]) < 2  "Cutting an edge with glueedges=true is undefined for
                                      TightBindingModel with next nearest unit cell hopping
                                      is undefined in that direction."
-            end
             if glueedges
                 pop!(r.hoppings, (n, m, R))
                 sethopping!(
