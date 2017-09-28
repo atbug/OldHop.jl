@@ -1,0 +1,356 @@
+
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="julia tight binding library">
+      
+      
+      
+        <meta name="author" content="mistguy">
+      
+      
+        <link rel="shortcut icon" href="./assets/images/favicon.png">
+      
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.10.1">
+    
+    
+      
+        <title>Hop.jl</title>
+      
+    
+    
+      <script src="./assets/javascripts/modernizr-e826f8942a.js"></script>
+    
+    
+      <link rel="stylesheet" href="./assets/stylesheets/application-a20f419c8e.css">
+      
+    
+    
+      
+        
+        
+        
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    
+      <link rel="stylesheet" href="./assets/Documenter.css">
+    
+    
+  </head>
+  
+  
+  
+  
+    <body>
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search">
+    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="." title="Hop.jl" class="md-header-nav__button md-logo">
+          
+            <i class="md-icon md-icon--home"></i>
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <span class="md-flex__ellipsis md-header-nav__title">
+          
+            
+              
+            
+            API reference
+          
+        </span>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="search"></label>
+  <div class="md-search__inner">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" required placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query">
+      <label class="md-icon md-search__icon" for="search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset">&#xE5CD;</button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result" data-md-lang-search="" data-md-lang-tokenizer="[\s\-]+">
+          <div class="md-search-result__meta" data-md-lang-result-none="No matching documents" data-md-lang-result-one="1 matching document" data-md-lang-result-other="# matching documents">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+
+  <a href="https://github.com/mistguy/Hop.jl" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+      
+      <main class="md-main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="drawer">
+    <div class="md-nav__button md-logo">
+      
+        <i class="md-icon md-icon--home"></i>
+      
+    </div>
+    Hop.jl
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+
+  <a href="https://github.com/mistguy/Hop.jl" title="Go to repository" class="md-source" data-md-source="github">
+    
+      <div class="md-source__icon">
+        <svg viewBox="0 0 24 24" width="24" height="24">
+          <use xlink:href="#github" width="24" height="24"></use>
+        </svg>
+      </div>
+    
+    <div class="md-source__repository">
+      GitHub
+    </div>
+  </a>
+
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+    <a href="." title="API reference" class="md-nav__link md-nav__link--active">
+      API reference
+    </a>
+    
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/mistguy/Hop.jl/edit/master/docs/src/index.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
+                
+                <p><a id='Hop.jl-Documentation-1'></a></p>
+<h1 id="hopjl-documentation">Hop.jl Documentation</h1>
+<p><a id='Hop.TightBindingModel' href='#Hop.TightBindingModel'>#</a>
+<strong><code>Hop.TightBindingModel</code></strong> &mdash; <em>Type</em>.</p>
+<p>A tight binding model.</p>
+<p>Generally, every tight binding model is three dimensional. Thus every lattice vector should have three components. Lower dimensional models should be simulated by vacuum layer.</p>
+<p><strong>Constructor Arguments</strong></p>
+<ul>
+<li><code>lat::Matrix{Float64}</code>: lattice vector. Lattice vectors should be provided in columns.`</li>
+<li><code>positions::Matrix{Float64}</code>: atom positions in reduced coordinate. Atom positions should be provided in columns.`</li>
+</ul>
+<p><strong>Fields</strong></p>
+<ul>
+<li><code>norbits::Int</code>: number of orbits.</li>
+<li><code>lat::Matrix{Float64}</code>: lattice vectors stored in columns.</li>
+<li><code>rlat::Matrix{Float64}</code>: reciprocal lattice vectors stored in columns.</li>
+<li><code>positions::Matrix{Float64}</code>: position of orbits in reduced coordinate stored in columns.</li>
+<li><code>hoppings::Dict{Tuple{Int64,Int64,Array{Int64,1}}, Complex128}</code>: hoppings.  Hopping example: (1, 1, [1, 0, 0]) =&gt; 1.0+0.0im indicates hopping from orbit 1  in unit cell labeled by [1, 0, 0] to orbit 1 in home unit cell is 1.0.</li>
+</ul>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L20-L41' class='documenter-source'>source</a><br></p>
+<p><a id='Hop.sethopping!' href='#Hop.sethopping!'>#</a>
+<strong><code>Hop.sethopping!</code></strong> &mdash; <em>Function</em>.</p>
+<pre><code>sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping::Number)
+</code></pre>
+
+<p>Set hoppings for a TightBindingModel t. Hoppings are labeled as ⟨0n|H|Rm⟩, where R is a 3-element Vector{Int} representing lattice vector. Hamiltonian is guaranteed to be Hermitian.</p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L56-L62' class='documenter-source'>source</a><br></p>
+<p><a id='Hop.calhamiltonian' href='#Hop.calhamiltonian'>#</a>
+<strong><code>Hop.calhamiltonian</code></strong> &mdash; <em>Function</em>.</p>
+<pre><code>calhamiltonian(t::TightBindingModel, k::Vector{&lt;:Real})--&gt;Matrix{Complex128}
+</code></pre>
+
+<p>Calculate Hamiltonian of a TightBindingModel t for a specific k point. k should be provided in reduced coordinate.</p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L71-L76' class='documenter-source'>source</a><br></p>
+<p><a id='Hop.caleig' href='#Hop.caleig'>#</a>
+<strong><code>Hop.caleig</code></strong> &mdash; <em>Function</em>.</p>
+<pre><code>caleig(t::TightBindingModel, k::Vector{&lt;:Real}, calegvecs::Bool=false)
+</code></pre>
+
+<p>Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coordinate.</p>
+<p><strong>Return</strong></p>
+<p>If calegvecs is true, <code>(egvals::Vector{Float64}, egvecs::Matrix{Complex128})</code>, otherwise just <code>egvals::Vector{Float64}</code>. Eigenvectors are stored in columns and eigenvalues are sorted from small to large.</p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L87-L96' class='documenter-source'>source</a><br></p>
+<p><a id='Hop.makesupercell' href='#Hop.makesupercell'>#</a>
+<strong><code>Hop.makesupercell</code></strong> &mdash; <em>Function</em>.</p>
+<pre><code>makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64})--&gt;TightBindingModel
+</code></pre>
+
+<p>Create a supercell out of a TightBindingModel t. scrdlat is a 3x3 matrix representing supercell reduced lattice vector in columns.</p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L115-L120' class='documenter-source'>source</a><br></p>
+<p><a id='Hop.cutedge' href='#Hop.cutedge'>#</a>
+<strong><code>Hop.cutedge</code></strong> &mdash; <em>Function</em>.</p>
+<pre><code>cutedge(t::TightBindingModel, dir::Int64, glueedges::Bool=false)--&gt;TightBindingModel
+</code></pre>
+
+<p>Create a D-1 dimensional TightBindingModel from a D dimensional one <code>t</code>. The finite direction is represented by <code>dir</code> following the convention of 1:x, 2:y, 3:z. If <code>glueedges</code> is true, the returned TightBindingModel will be made periodic in the <code>dir</code> direction.</p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L172-L179' class='documenter-source'>source</a><br></p>
+<p><a id='Hop.addmagneticfield' href='#Hop.addmagneticfield'>#</a>
+<strong><code>Hop.addmagneticfield</code></strong> &mdash; <em>Function</em>.</p>
+<pre><code>addmagneticfield(t::TightBindingModel, B::Real)--&gt;TightBindingModel
+</code></pre>
+
+<p>Add constant magnetic field in z direction for a TightBindingModel.</p>
+<p><strong>Arguments</strong></p>
+<ul>
+<li><code>t::TightBindingModel</code>: a TightBindingModel.</li>
+<li><code>B::Float64</code>: magnetic field in z direction. B is actually Be/h, thus its unit is 1/[length]^2. e here is fundamental charge. Since electron charge is -e, positive B means -z direction for electron system.</li>
+</ul>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L206-L215' class='documenter-source'>source</a><br></p>
+                
+                  
+                
+              
+              
+                
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="http://www.mkdocs.org" title="MkDocs">MkDocs</a>
+        and
+        <a href="http://squidfunk.github.io/mkdocs-material/" title="Material for MkDocs">
+          Material for MkDocs</a>
+      </div>
+      
+        
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="./assets/javascripts/application-f3ab9e5ff8.js"></script>
+      
+      
+      <script>app.initialize({url:{base:"."}})</script>
+      
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      
+        <script src="./assets/mathjaxhelper.js"></script>
+      
+    
+    
+      
+    
+  </body>
+</html>
