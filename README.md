@@ -6,6 +6,11 @@ Hop.jl is a simple julia tight binding library.
 
 API reference: https://mistguy.github.io/Hop.jl/latest/index.html
 
+# Installation
+```
+Pkg.add("Hop")
+```
+
 # Examples
 
 ## Hofstadter Butterfly
