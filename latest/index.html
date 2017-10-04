@@ -255,21 +255,21 @@
 <li><code>positions::Matrix{Float64}</code>: position of orbits in reduced coordinate stored in columns.</li>
 <li><code>hoppings::Dict{Tuple{Int64,Int64,Array{Int64,1}}, Complex128}</code>: hoppings.  Hopping example: (1, 1, [1, 0, 0]) =&gt; 1.0+0.0im indicates hopping from orbit 1  in unit cell labeled by [1, 0, 0] to orbit 1 in home unit cell is 1.0.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L20-L41' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/4c683b34d85bfe72cae5f2f3a46e361ac3c4c8e8/src/Hop.jl#L20-L41' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.sethopping!' href='#Hop.sethopping!'>#</a>
 <strong><code>Hop.sethopping!</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping::Number)
 </code></pre>
 
 <p>Set hoppings for a TightBindingModel t. Hoppings are labeled as ⟨0n|H|Rm⟩, where R is a 3-element Vector{Int} representing lattice vector. Hamiltonian is guaranteed to be Hermitian.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L56-L62' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/4c683b34d85bfe72cae5f2f3a46e361ac3c4c8e8/src/Hop.jl#L56-L62' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calhamiltonian' href='#Hop.calhamiltonian'>#</a>
 <strong><code>Hop.calhamiltonian</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>calhamiltonian(t::TightBindingModel, k::Vector{&lt;:Real})--&gt;Matrix{Complex128}
 </code></pre>
 
 <p>Calculate Hamiltonian of a TightBindingModel t for a specific k point. k should be provided in reduced coordinate.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L71-L76' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/4c683b34d85bfe72cae5f2f3a46e361ac3c4c8e8/src/Hop.jl#L71-L76' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.caleig' href='#Hop.caleig'>#</a>
 <strong><code>Hop.caleig</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>caleig(t::TightBindingModel, k::Vector{&lt;:Real}, calegvecs::Bool=false)
@@ -278,21 +278,21 @@
 <p>Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coordinate.</p>
 <p><strong>Return</strong></p>
 <p>If calegvecs is true, <code>(egvals::Vector{Float64}, egvecs::Matrix{Complex128})</code>, otherwise just <code>egvals::Vector{Float64}</code>. Eigenvectors are stored in columns and eigenvalues are sorted from small to large.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L87-L96' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/4c683b34d85bfe72cae5f2f3a46e361ac3c4c8e8/src/Hop.jl#L87-L96' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.makesupercell' href='#Hop.makesupercell'>#</a>
 <strong><code>Hop.makesupercell</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64})--&gt;TightBindingModel
 </code></pre>
 
 <p>Create a supercell out of a TightBindingModel t. scrdlat is a 3x3 matrix representing supercell reduced lattice vector in columns.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L115-L120' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/4c683b34d85bfe72cae5f2f3a46e361ac3c4c8e8/src/Hop.jl#L115-L120' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.cutedge' href='#Hop.cutedge'>#</a>
 <strong><code>Hop.cutedge</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>cutedge(t::TightBindingModel, dir::Int64, glueedges::Bool=false)--&gt;TightBindingModel
 </code></pre>
 
 <p>Create a D-1 dimensional TightBindingModel from a D dimensional one <code>t</code>. The finite direction is represented by <code>dir</code> following the convention of 1:x, 2:y, 3:z. If <code>glueedges</code> is true, the returned TightBindingModel will be made periodic in the <code>dir</code> direction.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L172-L179' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/4c683b34d85bfe72cae5f2f3a46e361ac3c4c8e8/src/Hop.jl#L172-L179' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.addmagneticfield' href='#Hop.addmagneticfield'>#</a>
 <strong><code>Hop.addmagneticfield</code></strong> &mdash; <em>Function</em>.</p>
 <pre><code>addmagneticfield(t::TightBindingModel, B::Real)--&gt;TightBindingModel
@@ -304,7 +304,7 @@
 <li><code>t::TightBindingModel</code>: a TightBindingModel.</li>
 <li><code>B::Float64</code>: magnetic field in z direction. B is actually Be/h, thus its unit is 1/[length]^2. e here is fundamental charge. Since electron charge is -e, positive B means -z direction for electron system.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/15ac69e39bd5d9b80022a4dc5ab74cc7f3853237/src/Hop.jl#L206-L215' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/tree/4c683b34d85bfe72cae5f2f3a46e361ac3c4c8e8/src/Hop.jl#L206-L215' class='documenter-source'>source</a><br></p>
                 
                   
                 
