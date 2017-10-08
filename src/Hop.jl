@@ -101,7 +101,7 @@ function caleig(t::TightBindingModel, k::Vector{<:Real}, calegvecs::Bool=false)
         (egvals, egvecs) = eig(hamiltonian)
         egvals = real(egvals)
         perm = sortperm(egvals)
-        sortedegvecs = zeros(size(egvecs))
+        sortedegvecs = zeros(Complex128, size(egvecs))
         for i in 1:t.norbits
             sortedegvecs[:, i] = egvecs[:, perm[i]]
         end
