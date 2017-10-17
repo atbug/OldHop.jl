@@ -1,4 +1,5 @@
 module Hop
+using StaticArrays
 
 export TightBindingModel, sethopping!, calhamiltonian, caleig, makesupercell, cutedge, addmagneticfield
 
@@ -13,7 +14,7 @@ struct TightBindingModel
     "atom positions"
     positions::Matrix{Float64}
     "hoppings"
-    hoppings::Dict{Tuple{Int64,Int64,Array{Int64,1}}, Complex128}
+    hoppings::Dict{Tuple{Int64,Int64,SVector{3,Int64}},Complex128}
 end
 
 
@@ -42,13 +43,7 @@ Lower dimensional models should be simulated by vacuum layer.
 function TightBindingModel(lat::Matrix{Float64}, positions::Matrix{Float64})
     @assert size(lat) == (3, 3) "Size of lat is not correct."
     @assert size(positions, 1) == 3 "Size of positions is not correct."
-    a1 = lat[:, 1]
-    a2 = lat[:, 2]
-    a3 = lat[:, 3]
-    rlat = zeros((3, 3))
-    rlat[:, 1] = 2π*((a2×a3)/(a1⋅(a2×a3)))
-    rlat[:, 2] = 2π*((a3×a1)/(a2⋅(a3×a1)))
-    rlat[:, 3] = 2π*((a1×a2)/(a3⋅(a1×a2)))
+    rlat = 2*π*inv(lat)'
     TightBindingModel(size(positions, 2), lat, rlat, positions, Dict())
 end
 
@@ -69,12 +64,12 @@ end
 
 
 """
-    calhamiltonian(t::TightBindingModel, k::Vector{<:Real})-->Matrix{Complex128}
+    calhamiltonian(t::TightBindingModel, k::Vector{T}) where T<:Real --> Matrix{Complex128}
 
 Calculate Hamiltonian of a TightBindingModel t for a specific k point. k should
 be provided in reduced coordinate.
 """
-function calhamiltonian(t::TightBindingModel, k::Vector{<:Real})
+function calhamiltonian(t::TightBindingModel, k::Vector{T}) where T<:Real
     @assert size(k) == (3,) "Size of k is not correct."
     h = zeros(Complex128, (t.norbits, t.norbits))
     for ((n, m, R), hopping) in t.hoppings
@@ -113,7 +108,7 @@ end
 
 
 """
-    makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64})-->TightBindingModel
+    makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64}) --> TightBindingModel
 
 Create a supercell out of a TightBindingModel t. scrdlat is a 3x3 matrix representing
 supercell reduced lattice vector in columns.
@@ -123,10 +118,15 @@ function makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64})
     @assert det(scrdlat) > 0 "scrdlat is not right handed."
     # find all the unit cells in the supercell
     ucs = []
+    # convert scrdlat to Rational{BigInt} to perform accurate linear
+    # algebra calculations
+    scrdlatinv = inv(convert(Matrix{Rational{BigInt}}, scrdlat))
+    @assert typeof(scrdlatinv) == Matrix{Rational{BigInt}}
     for k in minimum(scrdlat[3, :]):maximum(scrdlat[3, :])
         for j in minimum(scrdlat[2, :]):maximum(scrdlat[2, :])
             for i in minimum(scrdlat[1, :]):maximum(scrdlat[1, :])
-                sccoord = inv(scrdlat)*[i, j, k]
+                sccoord = scrdlatinv*[i, j, k]
+                @assert typeof(sccoord) == Vector{Rational{BigInt}}
                 if all(sccoord.>=0) && all(sccoord.<1)
                     push!(ucs, [i, j, k])
                 end
@@ -136,31 +136,23 @@ function makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64})
     nucs = length(ucs)
     @assert nucs == det(scrdlat) "Number of unit cells found is not correct."
     # construct the supercell
-    scpositions = Vector{Float64}()
-    for uc in ucs
-        for n in 1:t.norbits
-            scpositions = [scpositions; t.positions[:, n]+uc]
+    scpositions = zeros((3, nucs*t.norbits))
+    for iuc in nucs
+        for iorbit in 1:t.norbits
+            scpositions[:, (iuc-1)*t.norbits+iorbit] = t.positions[:, iorbit]+ucs[iuc]
         end
     end
-    scpositions = reshape(scpositions, (3, nucs*t.norbits))
     scpositions = inv(scrdlat)*scpositions
     sc = TightBindingModel(t.lat*scrdlat, scpositions)
     # set hoppings
-    a1 = scrdlat[:, 1]
-    a2 = scrdlat[:, 2]
-    a3 = scrdlat[:, 3]
-    scconjrdlat = zeros((3, 3))
-    scconjrdlat[:, 1] = (a2×a3)/(a1⋅(a2×a3))
-    scconjrdlat[:, 2] = (a3×a1)/(a2⋅(a3×a1))
-    scconjrdlat[:, 3] = (a1×a2)/(a3⋅(a1×a2))
     for i in 1:nucs
         for ((n, m, R), hopping) in t.hoppings
-            hoporiginscR = Int64.(fld.(scconjrdlat'*(ucs[i]+R), 1))
+            scR = Int64.(fld.(scrdlatinv*(ucs[i]+R), 1))
             sethopping!(
                 sc,
                 (i-1)*t.norbits+n,
-                (indexin([ucs[i]+R-scrdlat*hoporiginscR], ucs)[1]-1)*t.norbits+m,
-                hoporiginscR,
+                (indexin([ucs[i]+R-scrdlat*scR], ucs)[1]-1)*t.norbits+m,
+                scR,
                 hopping
             )
         end
@@ -170,7 +162,7 @@ end
 
 
 """
-    cutedge(t::TightBindingModel, dir::Int64, glueedges::Bool=false)-->TightBindingModel
+    cutedge(t::TightBindingModel, dir::Int64, glueedges::Bool=false) --> TightBindingModel
 
 Create a D-1 dimensional TightBindingModel from a D dimensional one `t`. The finite
 direction is represented by `dir` following the convention of 1:x, 2:y, 3:z.
@@ -204,7 +196,7 @@ end
 
 
 """
-    addmagneticfield(t::TightBindingModel, B::Real)-->TightBindingModel
+    addmagneticfield(t::TightBindingModel, B::Real) --> TightBindingModel
 
 Add constant magnetic field in z direction for a TightBindingModel.
 # Arguments
