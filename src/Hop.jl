@@ -26,9 +26,9 @@ Lower dimensional models should be simulated by vacuum layer.
 
 # Constructor Arguments
 - `lat::Matrix{Float64}`: lattice vector.
-  Lattice vectors should be provided in columns.`
+  Lattice vectors should be provided in columns.
 - `positions::Matrix{Float64}`: atom positions in reduced coordinate.
-  Atom positions should be provided in columns.`
+  Atom positions should be provided in columns.
 
 # Fields
 - `norbits::Int`: number of orbits.
