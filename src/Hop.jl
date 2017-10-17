@@ -30,35 +30,63 @@ Lower dimensional models should be simulated by vacuum layer.
   Lattice vectors should be provided in columns.
 - `positions::Matrix{Float64}`: atom positions in reduced coordinate.
   Atom positions should be provided in columns.
+- `nspins::Int64=1`: 1 for spinless systems and 2 for spinful systems. If `nspin`
+  is 2, `norbits` will be twice the number of `size(positions, 1)`. Orbits are
+  ordered as (|1↑⟩, |1↓⟩, |2↑⟩, |2↓⟩, ...).
 
 # Fields
 - `norbits::Int`: number of orbits.
 - `lat::Matrix{Float64}`: lattice vectors stored in columns.
 - `rlat::Matrix{Float64}`: reciprocal lattice vectors stored in columns.
 - `positions::Matrix{Float64}`: position of orbits in reduced coordinate stored in columns.
-- `hoppings::Dict{Tuple{Int64,Int64,Array{Int64,1}}, Complex128}`: hoppings.
+- `hoppings::Dict{Tuple{Int64,Int64,SVector{3,Int64}},Complex128}`: hoppings.
    Hopping example: (1, 1, [1, 0, 0]) => 1.0+0.0im indicates hopping from orbit 1
    in unit cell labeled by [1, 0, 0] to orbit 1 in home unit cell is 1.0.
 """
-function TightBindingModel(lat::Matrix{Float64}, positions::Matrix{Float64})
+function TightBindingModel(lat::Matrix{Float64}, positions::Matrix{Float64}, nspins::Int64=1)
     @assert size(lat) == (3, 3) "Size of lat is not correct."
     @assert size(positions, 1) == 3 "Size of positions is not correct."
     rlat = 2*π*inv(lat)'
-    TightBindingModel(size(positions, 2), lat, rlat, positions, Dict())
+    if nspins == 1
+        return TightBindingModel(size(positions, 2), lat, rlat, positions, Dict())
+    else
+        spinpositions = zeros(3, size(positions, 2)*2)
+        for i in 1:size(positions, 2)
+            spinpositions[:, 2*i-1] = positions[:, i]
+            spinpositions[:, 2*i] = positions[:, i]
+        end
+        return TightBindingModel(size(positions, 2)*2, lat, rlat, spinpositions, Dict())
+    end
+end
+
+
+function Base.show(io::IO, t::TightBindingModel)
+    print(io, "TightBindingModel: $(t.norbits) orbitals")
 end
 
 
 """
-    sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping::Number)
+    sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping)
 
-Set hoppings for a TightBindingModel t. Hoppings are labeled as ⟨0n|H|Rm⟩,
-where R is a 3-element Vector{Int} representing lattice vector. Hamiltonian is
-guaranteed to be Hermitian.
+Set ⟨0n|H|Rm⟩ to `hopping`. `hopping<:Number` for spinless systems and
+`hopping<:Matrix{<:Number}` for spinful systems. For spinful systems,
+`size(hopping)` should be (2, 2) and the basis for `hopping` is (|↑⟩, |↓⟩).
 """
 function sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping::Number)
     @assert (n in 1:t.norbits) && (m in 1:t.norbits) "No such orbit."
     t.hoppings[(n, m, R)] = hopping
     t.hoppings[(m, n, -R)] = hopping
+    return
+end
+
+
+function sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping::Matrix{T}) where T<:Number
+    @assert (n in 1:Int64(t.norbits/2)) && (m in 1:Int64(t.norbits)) "No such orbit."
+    @assert size(hopping) == (2, 2) "Size of hopping is not correct."
+    sethopping!(t, 2n-1, 2m-1, R, hopping[1, 1])
+    sethopping!(t, 2n, 2m-1, R, hopping[2, 1])
+    sethopping!(t, 2n-1, 2m, R, hopping[1, 2])
+    sethopping!(t, 2n, 2m, R, hopping[2, 2])
     return
 end
 

@@ -1,7 +1,7 @@
 language: julia
 julia:
  - 0.6
-before_install:
+before_script:
  - julia -e 'Pkg.add("StaticArrays")'
 after_success:
  - julia -e 'cd(Pkg.dir("Hop")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
