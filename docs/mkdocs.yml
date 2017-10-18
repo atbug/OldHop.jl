@@ -18,8 +18,10 @@ markdown_extensions:
   - tables
   - fenced_code
   - mdx_math
+  - codehilite
 
 docs_dir: 'build'
 
 pages:
-  - API reference: index.md
+  - Examples: examples.md
+  - API reference: api.md

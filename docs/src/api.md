@@ -1,4 +1,4 @@
-# Hop.jl Documentation
+# API reference
 
 ```@docs
 TightBindingModel
