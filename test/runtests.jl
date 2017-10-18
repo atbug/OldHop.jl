@@ -23,7 +23,7 @@ function graphene_test()
     @test calhamiltonian(graphene, [0.0, 0.0, 0.0])*caleig(graphene, [0.0, 0.0, 0.0], true)[2][:, 1] ≈
         -3.0*caleig(graphene, [0.0, 0.0, 0.0], true)[2][:, 1]
     kdist, egvals = calband(graphene, [1 0; 0 1; 0 0], 3)
-    @test isapprox(kdist, [0.0, 0.707107, 1.41421], atol=1.0e-5)
+    @test isapprox(kdist, [0.0, 1.0, 2.0], atol=1.0e-5)
     @test isapprox(egvals, [-3.0 -1.0 -3.0; 3.0 1.0 3.0], atol=1.0e-5)
 
     graphenesc = makesupercell(graphene, [2 0 0; 0 2 0; 0 0 1])
@@ -81,12 +81,42 @@ end
 function test_spin()
     lat = [1.0 0.5 0.0; 0.0 (√3)/2 0.0; 0.0 0.0 1.0]
     positions = [1/3 2/3; 1/3 2/3; 0.0 0.0]
-    graphene = TightBindingModel(lat, positions, 2)
+    graphene = TightBindingModel(lat, positions, spinful=true)
     hopping = [-1.0 0; 0 -1.0]
     sethopping!(graphene, 1, 2, [0, 0, 0], hopping)
     sethopping!(graphene, 2, 1, [1, 0, 0], hopping)
     sethopping!(graphene, 2, 1, [0, 1, 0], hopping)
     @test caleig(graphene, [0.0, 0.0, 0.0]) ≈ [-3.0, -3.0, 3.0, 3.0]
+
+    lat = [1 0.5 0; 0 (√3)/2 0; 0 0 1]
+    positions = [1/3 2/3; 1/3 2/3; 0 0]
+    tm = TightBindingModel(lat, positions, spinful=true)
+
+    σ0 = [1 0; 0 1]
+    σ1 = [0 1; 1 0]
+    σ2 = [0 -im; im 0]
+    σ3 = [1 0; 0 -1]
+
+    onsite = 1.0
+    t = 1.0
+    so = 0.6*t*0.5
+
+    sethopping!(tm, 1, 1, [0, 0, 0], σ0*onsite)
+    sethopping!(tm, 2, 2, [0, 0, 0], -σ0*onsite)
+
+    sethopping!(tm, 1, 2, [0, 0, 0], σ0*t)
+    sethopping!(tm, 1, 2, [0, -1, 0], σ0*t)
+    sethopping!(tm, 1, 2, [-1, 0, 0], σ0*t)
+
+    sethopping!(tm, 1, 1, [0, 1, 0], -im*so*σ3)
+    sethopping!(tm, 1, 1, [1, 0, 0], im*so*σ3)
+    sethopping!(tm, 1, 1, [1, -1, 0], -im*so*σ3)
+    sethopping!(tm, 2, 2, [0, 1, 0], im*so*σ3)
+    sethopping!(tm, 2, 2, [1, 0, 0], -im*so*σ3)
+    sethopping!(tm, 2, 2, [1, -1, 0], im*so*σ3)
+    @test isapprox(caleig(tm, [2/3, 1/3, 0.0]),
+        [-2.55885, -0.558846, 0.558846, 2.55885], atol=1.0e-5)
+
 end
 
 graphene_test()

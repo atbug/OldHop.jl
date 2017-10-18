@@ -43,11 +43,11 @@ Lower dimensional models should be simulated by vacuum layer.
    Hopping example: (1, 1, [1, 0, 0]) => 1.0+0.0im indicates hopping from orbit 1
    in unit cell labeled by [1, 0, 0] to orbit 1 in home unit cell is 1.0.
 """
-function TightBindingModel(lat::Matrix{Float64}, positions::Matrix{Float64}, nspins::Int64=1)
+function TightBindingModel(lat::Matrix{Float64}, positions::Matrix{Float64}; spinful::Bool=false)
     @assert size(lat) == (3, 3) "Size of lat is not correct."
     @assert size(positions, 1) == 3 "Size of positions is not correct."
     rlat = 2*π*inv(lat)'
-    if nspins == 1
+    if !spinful
         return TightBindingModel(size(positions, 2), lat, rlat, positions, Dict())
     else
         spinpositions = zeros(3, size(positions, 2)*2)
@@ -75,7 +75,7 @@ Set ⟨0n|H|Rm⟩ to `hopping`. `hopping::Number` for spinless systems and
 function sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Union{Vector{Int64},SVector{3,Int64}}, hopping::Number)
     @assert (n in 1:t.norbits) && (m in 1:t.norbits) "No such orbit."
     t.hoppings[(n, m, R)] = hopping
-    t.hoppings[(m, n, -R)] = hopping
+    t.hoppings[(m, n, -R)] = conj(hopping)
     return
 end
 
@@ -150,14 +150,15 @@ function calband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64)
     kdist = zeros(nkpts)
     egvals = zeros(t.norbits, nkpts)
     for ipath in 1:npaths
-        dk = (kpath[:, 2*ipath] - kpath[:, 2*ipath-1])/(ndiv-1)
+        dk = (kpath[:, 2*ipath]-kpath[:, 2*ipath-1])/(ndiv-1)
+        dkn = norm(t.rlat*dk)/(2π) # real norm of dk
         if ipath == 1
             kdist0 = 0
         else
             kdist0 = kdist[(ipath-1)*ndiv]
         end
         for ikpt in 1:ndiv
-            kdist[(ipath-1)*ndiv+ikpt] = norm(dk)*(ikpt-1) + kdist0
+            kdist[(ipath-1)*ndiv+ikpt] = dkn*(ikpt-1) + kdist0
             k = kpath[:, 2*ipath-1]+dk*(ikpt-1)
             egvals[:, (ipath-1)*ndiv+ikpt] = caleig(t, k)
         end

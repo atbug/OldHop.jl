@@ -4,7 +4,7 @@
 
 ```julia
 using Hop
-using Pyplot
+using PyPlot
 # Lattice vector. Notice that lattice vectors are stored by column.
 lat = [1.0 0.5 0.0; 0.0 (√3)/2 0.0; 0.0 0.0 1.0]
 # Reduced positions of orbits. Notice that positions are stored by column.
@@ -16,7 +16,7 @@ sethopping!(graphene, 1, 2, [0, 0, 0], -1.0) # ⟨1|H|(0, 0, 0)2⟩=-1
 sethopping!(graphene, 2, 1, [1, 0, 0], -1.0) # ⟨2|H|(1, 0, 0)1⟩=-1
 sethopping!(graphene, 2, 1, [0, 1, 0], -1.0) # ⟨2|H|(0, 1, 0)1⟩=-1
 
-kdist, egvals = calband(graphene, [1 0; 0 1; 0 0], 3)
+kdist, egvals = calband(graphene, [1 0; 0 1; 0 0], 100)
 
 plot(kdist, egvals[1, :])
 plot(kdist, egvals[2, :])
