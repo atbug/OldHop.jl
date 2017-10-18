@@ -68,11 +68,11 @@ end
 """
     sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping)
 
-Set ⟨0n|H|Rm⟩ to `hopping`. `hopping<:Number` for spinless systems and
-`hopping<:Matrix{<:Number}` for spinful systems. For spinful systems,
+Set ⟨0n|H|Rm⟩ to `hopping`. `hopping::Number` for spinless systems and
+`hopping::Matrix{<:Number}` for spinful systems. For spinful systems,
 `size(hopping)` should be (2, 2) and the basis for `hopping` is (|↑⟩, |↓⟩).
 """
-function sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping::Number)
+function sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Union{Vector{Int64},SVector{3,Int64}}, hopping::Number)
     @assert (n in 1:t.norbits) && (m in 1:t.norbits) "No such orbit."
     t.hoppings[(n, m, R)] = hopping
     t.hoppings[(m, n, -R)] = hopping
@@ -80,7 +80,7 @@ function sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64},
 end
 
 
-function sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping::Matrix{T}) where T<:Number
+function sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Union{Vector{Int64},SVector{3,Int64}}, hopping::Matrix{<:Number})
     @assert (n in 1:Int64(t.norbits/2)) && (m in 1:Int64(t.norbits)) "No such orbit."
     @assert size(hopping) == (2, 2) "Size of hopping is not correct."
     sethopping!(t, 2n-1, 2m-1, R, hopping[1, 1])
@@ -92,12 +92,12 @@ end
 
 
 """
-    calhamiltonian(t::TightBindingModel, k::Vector{T}) where T<:Real --> Matrix{Complex128}
+    calhamiltonian(t::TightBindingModel, k::Vector{<:Real}) --> Matrix{Complex128}
 
 Calculate Hamiltonian of a TightBindingModel t for a specific k point. k should
 be provided in reduced coordinate.
 """
-function calhamiltonian(t::TightBindingModel, k::Vector{T}) where T<:Real
+function calhamiltonian(t::TightBindingModel, k::Vector{<:Real})
     @assert size(k) == (3,) "Size of k is not correct."
     h = zeros(Complex128, (t.norbits, t.norbits))
     for ((n, m, R), hopping) in t.hoppings
@@ -176,18 +176,24 @@ function makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64})
     @assert size(scrdlat) == (3, 3) "Size of scrdlat is not correct."
     @assert det(scrdlat) > 0 "scrdlat is not right handed."
     # find all the unit cells in the supercell
-    ucs = []
+    ucs = Vector{SVector{3, Int64}}()
     # convert scrdlat to Rational{BigInt} to perform accurate linear
     # algebra calculations
-    scrdlatinv = inv(convert(Matrix{Rational{BigInt}}, scrdlat))
-    @assert typeof(scrdlatinv) == Matrix{Rational{BigInt}}
-    for k in minimum(scrdlat[3, :]):maximum(scrdlat[3, :])
-        for j in minimum(scrdlat[2, :]):maximum(scrdlat[2, :])
-            for i in minimum(scrdlat[1, :]):maximum(scrdlat[1, :])
-                sccoord = scrdlatinv*[i, j, k]
-                @assert typeof(sccoord) == Vector{Rational{BigInt}}
+    scrdlatinv = inv(convert(SMatrix{3, 3, Rational{BigInt}}, scrdlat))
+    ranges = [
+        minimum(scrdlat[1, :]):maximum(scrdlat[1, :]),
+        minimum(scrdlat[2, :]):maximum(scrdlat[2, :]),
+        minimum(scrdlat[3, :]):maximum(scrdlat[3, :])
+    ]
+    @assert typeof(scrdlatinv) == SArray{Tuple{3,3},Rational{BigInt},2,9}
+    for k in ranges[3]
+        for j in ranges[2]
+            for i in ranges[1]
+                uc = @SVector [i, j, k]
+                sccoord = scrdlatinv*uc
+                @assert typeof(sccoord) == SVector{3, Rational{BigInt}}
                 if all(sccoord.>=0) && all(sccoord.<1)
-                    push!(ucs, [i, j, k])
+                    push!(ucs, uc)
                 end
             end
         end
@@ -204,13 +210,20 @@ function makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64})
     scpositions = inv(scrdlat)*scpositions
     sc = TightBindingModel(t.lat*scrdlat, scpositions)
     # set hoppings
+    function findind(a, c)
+        for i in 1:length(c)
+            if a == c[i]
+                return i
+            end
+        end
+    end
     for i in 1:nucs
         for ((n, m, R), hopping) in t.hoppings
-            scR = Int64.(fld.(scrdlatinv*(ucs[i]+R), 1))
+            scR = convert(SVector{3, Int64}, fld.(scrdlatinv*(ucs[i]+R), 1))
             sethopping!(
                 sc,
                 (i-1)*t.norbits+n,
-                (indexin([ucs[i]+R-scrdlat*scR], ucs)[1]-1)*t.norbits+m,
+                (findind(ucs[i]+R-scrdlat*scR, ucs)-1)*t.norbits+m,
                 scR,
                 hopping
             )

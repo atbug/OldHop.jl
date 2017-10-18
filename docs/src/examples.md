@@ -38,7 +38,8 @@ using Plots
 
 # Size of the lattice is 15x15
 sz = 15
-# Magnetic flux is varied between 0 flux quantum and 1 flux quantum by 51 divisions.
+# Magnetic flux is varied between 0 flux quantum and 1 flux quantum
+# by 51 divisions.
 nmags = 51
 # Lattice vector. Notice that lattice vectors are stored by column.
 lat = [1.0 0.0 0.0; 0.0 1.0 0.0; 0.0 0.0 1.0]
@@ -51,7 +52,8 @@ t = TightBindingModel(lat, positions)
 sethopping!(t, 1, 1, [1, 0, 0], 1.0) # ⟨0|H|(1, 0, 0)⟩=1
 sethopping!(t, 1, 1, [0, 1, 0], 1.0) # ⟨0|H|(0, 1, 0)⟩=1
 # Create a supercell and then create a cluster from the supercell
-c = cutedge(cutedge(cutedge(makesupercell(t, [sz 0 0; 0 sz 0; 0 0 1]), 1), 2), 3)
+c = cutedge(cutedge(cutedge(
+    makesupercell(t, [sz 0 0; 0 sz 0; 0 0 1]), 1), 2), 3)
 # List of magnetic field.
 Bs = linspace(0, 1, nmags)
 # Eigenvalues.
@@ -74,6 +76,7 @@ end
 savefig("butterfly.png")
 ```
 
-output figure (Notice the following butterfly is produced with a 100x100 lattice):
+output figure:
+(Notice the following butterfly is produced with a 100x100 lattice)
 
 ![butterfly](http://i.imgur.com/IBzSsXV.png)
