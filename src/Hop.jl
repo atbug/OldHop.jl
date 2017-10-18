@@ -1,7 +1,7 @@
 module Hop
 using StaticArrays
 
-export TightBindingModel, sethopping!, calhamiltonian, caleig, makesupercell, cutedge, addmagneticfield
+export TightBindingModel, sethopping!, calhamiltonian, caleig, calband, makesupercell, cutedge, addmagneticfield
 
 
 struct TightBindingModel
@@ -132,6 +132,37 @@ function caleig(t::TightBindingModel, k::Vector{<:Real}, calegvecs::Bool=false)
     else
         return sort(real(eigvals(hamiltonian)))
     end
+end
+
+
+"""
+    calband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64) --> (Vector{Float64}, Matrix{Float64})
+
+Calculate bands. `kpath` is a (3, x) size matrix where x is an even number and
+should be provided in reduced coordinates.
+This function returns (`kdist`, `egvals`). `kdist` is the distance of k points and
+`egvals` is the energies of band stored in column at each k.
+"""
+function calband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64)
+    @assert mod(size(kpath, 2), 2) == 0
+    npaths = Int64(size(kpath, 2)/2)
+    nkpts = Int64(size(kpath, 2)/2)*ndiv
+    kdist = zeros(nkpts)
+    egvals = zeros(t.norbits, nkpts)
+    for ipath in 1:npaths
+        dk = (kpath[:, 2*ipath] - kpath[:, 2*ipath-1])/(ndiv-1)
+        if ipath == 1
+            kdist0 = 0
+        else
+            kdist0 = kdist[(ipath-1)*ndiv]
+        end
+        for ikpt in 1:ndiv
+            kdist[(ipath-1)*ndiv+ikpt] = norm(dk)*(ikpt-1) + kdist0
+            k = kpath[:, 2*ipath-1]+dk*(ikpt-1)
+            egvals[:, (ipath-1)*ndiv+ikpt] = caleig(t, k)
+        end
+    end
+    return (kdist, egvals)
 end
 
 

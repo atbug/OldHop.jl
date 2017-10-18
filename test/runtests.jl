@@ -22,6 +22,9 @@ function graphene_test()
     @test caleig(graphene, [0.0, 0.0, 0.0]) ≈ [-3.0, 3.0]
     @test calhamiltonian(graphene, [0.0, 0.0, 0.0])*caleig(graphene, [0.0, 0.0, 0.0], true)[2][:, 1] ≈
         -3.0*caleig(graphene, [0.0, 0.0, 0.0], true)[2][:, 1]
+    kdist, egvals = calband(graphene, [1 0; 0 1; 0 0], 3)
+    @test isapprox(kdist, [0.0, 0.707107, 1.41421], atol=1.0e-5)
+    @test isapprox(egvals, [-3.0 -1.0 -3.0; 3.0 1.0 3.0], atol=1.0e-5)
 
     graphenesc = makesupercell(graphene, [2 0 0; 0 2 0; 0 0 1])
 
