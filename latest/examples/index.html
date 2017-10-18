@@ -16,7 +16,7 @@
       
         <link rel="shortcut icon" href="../assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.10.3">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.10.4">
     
     
       
@@ -27,7 +27,7 @@
       <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-9011e2d3f8.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application-0741cbeb94.css">
       
     
     
@@ -341,7 +341,8 @@
 
 <span class="c"># Size of the lattice is 15x15</span>
 <span class="n">sz</span> <span class="o">=</span> <span class="mi">15</span>
-<span class="c"># Magnetic flux is varied between 0 flux quantum and 1 flux quantum by 51 divisions.</span>
+<span class="c"># Magnetic flux is varied between 0 flux quantum and 1 flux quantum</span>
+<span class="c"># by 51 divisions.</span>
 <span class="n">nmags</span> <span class="o">=</span> <span class="mi">51</span>
 <span class="c"># Lattice vector. Notice that lattice vectors are stored by column.</span>
 <span class="n">lat</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span> <span class="mf">0.0</span> <span class="mf">0.0</span><span class="p">;</span> <span class="mf">0.0</span> <span class="mf">1.0</span> <span class="mf">0.0</span><span class="p">;</span> <span class="mf">0.0</span> <span class="mf">0.0</span> <span class="mf">1.0</span><span class="p">]</span>
@@ -354,7 +355,8 @@
 <span class="n">sethopping!</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c"># ⟨0|H|(1, 0, 0)⟩=1</span>
 <span class="n">sethopping!</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)</span> <span class="c"># ⟨0|H|(0, 1, 0)⟩=1</span>
 <span class="c"># Create a supercell and then create a cluster from the supercell</span>
-<span class="n">c</span> <span class="o">=</span> <span class="n">cutedge</span><span class="p">(</span><span class="n">cutedge</span><span class="p">(</span><span class="n">cutedge</span><span class="p">(</span><span class="n">makesupercell</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">[</span><span class="n">sz</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">;</span> <span class="mi">0</span> <span class="n">sz</span> <span class="mi">0</span><span class="p">;</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">]),</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">cutedge</span><span class="p">(</span><span class="n">cutedge</span><span class="p">(</span><span class="n">cutedge</span><span class="p">(</span>
+    <span class="n">makesupercell</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">[</span><span class="n">sz</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">;</span> <span class="mi">0</span> <span class="n">sz</span> <span class="mi">0</span><span class="p">;</span> <span class="mi">0</span> <span class="mi">0</span> <span class="mi">1</span><span class="p">]),</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
 <span class="c"># List of magnetic field.</span>
 <span class="n">Bs</span> <span class="o">=</span> <span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nmags</span><span class="p">)</span>
 <span class="c"># Eigenvalues.</span>
@@ -378,7 +380,7 @@
 </pre></div>
 
 
-<p>output figure (Notice the following butterfly is produced with a 100x100 lattice):</p>
+<p>output figure: (Notice the following butterfly is produced with a 100x100 lattice)</p>
 <p><img alt="butterfly" src="http://i.imgur.com/IBzSsXV.png" /></p>
                 
                   
@@ -435,7 +437,7 @@
       
     </div>
     
-      <script src="../assets/javascripts/application-f3ab9e5ff8.js"></script>
+      <script src="../assets/javascripts/application-683e1b679e.js"></script>
       
       
       <script>app.initialize({url:{base:".."}})</script>

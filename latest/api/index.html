@@ -16,7 +16,7 @@
       
         <link rel="shortcut icon" href="../assets/images/favicon.png">
       
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.10.3">
+      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.10.4">
     
     
       
@@ -27,7 +27,7 @@
       <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-9011e2d3f8.css">
+      <link rel="stylesheet" href="../assets/stylesheets/application-0741cbeb94.css">
       
     
     
@@ -269,23 +269,23 @@
 <li><code>positions::Matrix{Float64}</code>: position of orbits in reduced coordinate stored in columns.</li>
 <li><code>hoppings::Dict{Tuple{Int64,Int64,SVector{3,Int64}},Complex128}</code>: hoppings.  Hopping example: (1, 1, [1, 0, 0]) =&gt; 1.0+0.0im indicates hopping from orbit 1  in unit cell labeled by [1, 0, 0] to orbit 1 in home unit cell is 1.0.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ffc4e5522adc7cb73835f489241c9605980025a8/src/Hop.jl#L21-L45' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/45840880290e0d90ff2b285fbcca959c63583688/src/Hop.jl#L21-L45' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.sethopping!' href='#Hop.sethopping!'>#</a>
 <strong><code>Hop.sethopping!</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span>sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping)
 </pre></div>
 
 
-<p>Set ⟨0n|H|Rm⟩ to <code>hopping</code>. <code>hopping&lt;:Number</code> for spinless systems and <code>hopping&lt;:Matrix{&lt;:Number}</code> for spinful systems. For spinful systems, <code>size(hopping)</code> should be (2, 2) and the basis for <code>hopping</code> is (|↑⟩, |↓⟩).</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ffc4e5522adc7cb73835f489241c9605980025a8/src/Hop.jl#L68-L74' class='documenter-source'>source</a><br></p>
+<p>Set ⟨0n|H|Rm⟩ to <code>hopping</code>. <code>hopping::Number</code> for spinless systems and <code>hopping::Matrix{&lt;:Number}</code> for spinful systems. For spinful systems, <code>size(hopping)</code> should be (2, 2) and the basis for <code>hopping</code> is (|↑⟩, |↓⟩).</p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/45840880290e0d90ff2b285fbcca959c63583688/src/Hop.jl#L68-L74' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calhamiltonian' href='#Hop.calhamiltonian'>#</a>
 <strong><code>Hop.calhamiltonian</code></strong> &mdash; <em>Function</em>.</p>
-<div class="codehilite"><pre><span></span>calhamiltonian(t::TightBindingModel, k::Vector{T}) where T&lt;:Real --&gt; Matrix{Complex128}
+<div class="codehilite"><pre><span></span>calhamiltonian(t::TightBindingModel, k::Vector{&lt;:Real}) --&gt; Matrix{Complex128}
 </pre></div>
 
 
 <p>Calculate Hamiltonian of a TightBindingModel t for a specific k point. k should be provided in reduced coordinate.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ffc4e5522adc7cb73835f489241c9605980025a8/src/Hop.jl#L94-L99' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/45840880290e0d90ff2b285fbcca959c63583688/src/Hop.jl#L94-L99' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.caleig' href='#Hop.caleig'>#</a>
 <strong><code>Hop.caleig</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span>caleig(t::TightBindingModel, k::Vector{&lt;:Real}, calegvecs::Bool=false)
@@ -295,7 +295,7 @@
 <p>Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coordinate.</p>
 <p><strong>Return</strong></p>
 <p>If calegvecs is true, <code>(egvals::Vector{Float64}, egvecs::Matrix{Complex128})</code>, otherwise just <code>egvals::Vector{Float64}</code>. Eigenvectors are stored in columns and eigenvalues are sorted from small to large.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ffc4e5522adc7cb73835f489241c9605980025a8/src/Hop.jl#L110-L119' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/45840880290e0d90ff2b285fbcca959c63583688/src/Hop.jl#L110-L119' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calband' href='#Hop.calband'>#</a>
 <strong><code>Hop.calband</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span>calband(t::TightBindingModel, kpath::Matrix{&lt;:Real}, ndiv::Int64) --&gt; (Vector{Float64}, Matrix{Float64})
@@ -303,7 +303,7 @@
 
 
 <p>Calculate bands. <code>kpath</code> is a (3, x) size matrix where x is an even number and should be provided in reduced coordinates. This function returns (<code>kdist</code>, <code>egvals</code>). <code>kdist</code> is the distance of k points and <code>egvals</code> is the energies of band stored in column at each k.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ffc4e5522adc7cb73835f489241c9605980025a8/src/Hop.jl#L138-L145' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/45840880290e0d90ff2b285fbcca959c63583688/src/Hop.jl#L138-L145' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.makesupercell' href='#Hop.makesupercell'>#</a>
 <strong><code>Hop.makesupercell</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span>makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64}) --&gt; TightBindingModel
@@ -311,7 +311,7 @@
 
 
 <p>Create a supercell out of a TightBindingModel t. scrdlat is a 3x3 matrix representing supercell reduced lattice vector in columns.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ffc4e5522adc7cb73835f489241c9605980025a8/src/Hop.jl#L169-L174' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/45840880290e0d90ff2b285fbcca959c63583688/src/Hop.jl#L169-L174' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.cutedge' href='#Hop.cutedge'>#</a>
 <strong><code>Hop.cutedge</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span>cutedge(t::TightBindingModel, dir::Int64, glueedges::Bool=false) --&gt; TightBindingModel
@@ -319,7 +319,7 @@
 
 
 <p>Create a D-1 dimensional TightBindingModel from a D dimensional one <code>t</code>. The finite direction is represented by <code>dir</code> following the convention of 1:x, 2:y, 3:z. If <code>glueedges</code> is true, the returned TightBindingModel will be made periodic in the <code>dir</code> direction.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ffc4e5522adc7cb73835f489241c9605980025a8/src/Hop.jl#L223-L230' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/45840880290e0d90ff2b285fbcca959c63583688/src/Hop.jl#L236-L243' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.addmagneticfield' href='#Hop.addmagneticfield'>#</a>
 <strong><code>Hop.addmagneticfield</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span>addmagneticfield(t::TightBindingModel, B::Real) --&gt; TightBindingModel
@@ -332,7 +332,7 @@
 <li><code>t::TightBindingModel</code>: a TightBindingModel.</li>
 <li><code>B::Float64</code>: magnetic field in z direction. B is actually Be/h, thus its unit is 1/[length]^2. e here is fundamental charge. Since electron charge is -e, positive B means -z direction for electron system.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ffc4e5522adc7cb73835f489241c9605980025a8/src/Hop.jl#L257-L266' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/45840880290e0d90ff2b285fbcca959c63583688/src/Hop.jl#L270-L279' class='documenter-source'>source</a><br></p>
                 
                   
                 
@@ -388,7 +388,7 @@
       
     </div>
     
-      <script src="../assets/javascripts/application-f3ab9e5ff8.js"></script>
+      <script src="../assets/javascripts/application-683e1b679e.js"></script>
       
       
       <script>app.initialize({url:{base:".."}})</script>
