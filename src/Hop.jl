@@ -72,21 +72,37 @@ Set ⟨0n|H|Rm⟩ to `hopping`. `hopping::Number` for spinless systems and
 `hopping::Matrix{<:Number}` for spinful systems. For spinful systems,
 `size(hopping)` should be (2, 2) and the basis for `hopping` is (|↑⟩, |↓⟩).
 """
-function sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Union{Vector{Int64},SVector{3,Int64}}, hopping::Number)
+function sethopping!(t::TightBindingModel, n::Int64, m::Int64,
+    R::Union{Vector{Int64},SVector{3,Int64}}, hopping::Number; mode='a')
     @assert (n in 1:t.norbits) && (m in 1:t.norbits) "No such orbit."
-    t.hoppings[(n, m, R)] = hopping
-    t.hoppings[(m, n, -R)] = conj(hopping)
+    if mode == 's'
+        t.hoppings[(n, m, R)] = hopping
+        t.hoppings[(m, n, -R)] = conj(hopping)
+    elseif mode == 'a'
+        if !((n, m, R) in keys(t.hoppings))
+            @assert !((m, n, -R) in keys(t.hoppings))
+            t.hoppings[(n, m, R)] = 0
+            t.hoppings[(m, n, -R)] = 0
+        end
+        t.hoppings[(n, m, R)] += hopping
+        if (n, m, R) != (m, n, -R) # not onsite energy
+            t.hoppings[(m, n, -R)] += conj(hopping)
+        end
+    end
     return
 end
 
 
-function sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Union{Vector{Int64},SVector{3,Int64}}, hopping::Matrix{<:Number})
+function sethopping!(t::TightBindingModel, n::Int64, m::Int64,
+    R::Union{Vector{Int64},SVector{3,Int64}}, hopping::Matrix{<:Number}; mode='a')
     @assert (n in 1:Int64(t.norbits/2)) && (m in 1:Int64(t.norbits)) "No such orbit."
     @assert size(hopping) == (2, 2) "Size of hopping is not correct."
-    sethopping!(t, 2n-1, 2m-1, R, hopping[1, 1])
-    sethopping!(t, 2n, 2m-1, R, hopping[2, 1])
-    sethopping!(t, 2n-1, 2m, R, hopping[1, 2])
-    sethopping!(t, 2n, 2m, R, hopping[2, 2])
+    sethopping!(t, 2n-1, 2m-1, R, hopping[1, 1], mode=mode)
+    sethopping!(t, 2n, 2m-1, R, hopping[2, 1], mode=mode)
+    if (n, m, R) != (m, n, -R) # not onsite energy
+        sethopping!(t, 2n-1, 2m, R, hopping[1, 2], mode=mode)
+    end
+    sethopping!(t, 2n, 2m, R, hopping[2, 2], mode=mode)
     return
 end
 
@@ -226,7 +242,8 @@ function makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64})
                 (i-1)*t.norbits+n,
                 (findind(ucs[i]+R-scrdlat*scR, ucs)-1)*t.norbits+m,
                 scR,
-                hopping
+                hopping,
+                mode='s'
             )
         end
     end
@@ -256,7 +273,8 @@ function cutedge(t::TightBindingModel, dir::Int64, glueedges::Bool=false)
                 n,
                 m,
                 [0, 0, 0],
-                hopping
+                hopping,
+                mode='s'
                 )
 
             else

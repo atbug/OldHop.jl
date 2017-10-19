@@ -79,6 +79,7 @@ end
 
 
 function test_spin()
+    # graphene
     lat = [1.0 0.5 0.0; 0.0 (√3)/2 0.0; 0.0 0.0 1.0]
     positions = [1/3 2/3; 1/3 2/3; 0.0 0.0]
     graphene = TightBindingModel(lat, positions, spinful=true)
@@ -88,26 +89,33 @@ function test_spin()
     sethopping!(graphene, 2, 1, [0, 1, 0], hopping)
     @test caleig(graphene, [0.0, 0.0, 0.0]) ≈ [-3.0, -3.0, 3.0, 3.0]
 
+    # graphene
+    lat = [1.0 0.5 0.0; 0.0 (√3)/2 0.0; 0.0 0.0 1.0]
+    positions = [1/3 2/3; 1/3 2/3; 0.0 0.0]
+    graphene = TightBindingModel(lat, positions, spinful=true)
+    hopping = [-1.0 0; 0 -1.0]
+    sethopping!(graphene, 1, 2, [0, 0, 0], hopping/2)
+    sethopping!(graphene, 1, 2, [0, 0, 0], hopping/2)
+    sethopping!(graphene, 2, 1, [1, 0, 0], hopping)
+    sethopping!(graphene, 2, 1, [0, 1, 0], hopping)
+    @test caleig(graphene, [0.0, 0.0, 0.0]) ≈ [-3.0, -3.0, 3.0, 3.0]
+
+    # Kane-Mele
     lat = [1 0.5 0; 0 (√3)/2 0; 0 0 1]
     positions = [1/3 2/3; 1/3 2/3; 0 0]
     tm = TightBindingModel(lat, positions, spinful=true)
-
     σ0 = [1 0; 0 1]
     σ1 = [0 1; 1 0]
     σ2 = [0 -im; im 0]
     σ3 = [1 0; 0 -1]
-
     onsite = 1.0
     t = 1.0
     so = 0.6*t*0.5
-
     sethopping!(tm, 1, 1, [0, 0, 0], σ0*onsite)
     sethopping!(tm, 2, 2, [0, 0, 0], -σ0*onsite)
-
     sethopping!(tm, 1, 2, [0, 0, 0], σ0*t)
     sethopping!(tm, 1, 2, [0, -1, 0], σ0*t)
     sethopping!(tm, 1, 2, [-1, 0, 0], σ0*t)
-
     sethopping!(tm, 1, 1, [0, 1, 0], -im*so*σ3)
     sethopping!(tm, 1, 1, [1, 0, 0], im*so*σ3)
     sethopping!(tm, 1, 1, [1, -1, 0], -im*so*σ3)
@@ -117,6 +125,11 @@ function test_spin()
     @test isapprox(caleig(tm, [2/3, 1/3, 0.0]),
         [-2.55885, -0.558846, 0.558846, 2.55885], atol=1.0e-5)
 
+    lat = eye(3)
+    positions = zeros(3, 1)
+    atom = TightBindingModel(lat, positions, spinful=true)
+    sethopping!(atom, 1, 1, [0, 0, 0], [0 -im; im 0])
+    @test caleig(atom, [0.0, 0.0, 0.0]) ≈ [-1.0, 1.0]
 end
 
 graphene_test()
