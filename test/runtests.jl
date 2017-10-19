@@ -20,8 +20,8 @@ function graphene_test()
     sethopping!(graphene, 2, 1, [0, 1, 0], -1.0)
 
     @test caleig(graphene, [0.0, 0.0, 0.0]) ≈ [-3.0, 3.0]
-    @test calhamiltonian(graphene, [0.0, 0.0, 0.0])*caleig(graphene, [0.0, 0.0, 0.0], true)[2][:, 1] ≈
-        -3.0*caleig(graphene, [0.0, 0.0, 0.0], true)[2][:, 1]
+    @test calhamiltonian(graphene, [0.0, 0.0, 0.0])*caleig(graphene, [0.0, 0.0, 0.0]; calegvecs=true)[2][:, 1] ≈
+        -3.0*caleig(graphene, [0.0, 0.0, 0.0]; calegvecs=true)[2][:, 1]
     kdist, egvals = calband(graphene, [1 0; 0 1; 0 0], 3)
     @test isapprox(kdist, [0.0, 1.0, 2.0], atol=1.0e-5)
     @test isapprox(egvals, [-3.0 -1.0 -3.0; 3.0 1.0 3.0], atol=1.0e-5)
@@ -61,7 +61,7 @@ function line_test()
     sethopping!(line, 1, 2, [0, 0, 0], 1)
     sethopping!(line, 2, 3, [0, 0, 0], 1)
     sethopping!(line, 3, 1, [1, 0, 0], 1)
-    segment = cutedge(line, 1, true)
+    segment = cutedge(line, 1, glueedges=true)
     @test caleig(segment, [0.0, 0, 0]) ≈ [-1, -1, 2]
 end
 
@@ -132,7 +132,19 @@ function test_spin()
     @test caleig(atom, [0.0, 0.0, 0.0]) ≈ [-1.0, 1.0]
 end
 
+function test_proj()
+    lat = eye(3)
+    positions = [0 0.5; 0 0; 0 0]
+    t = TightBindingModel(lat, positions)
+    sethopping!(t, 1, 2, [0, 0, 0], 1.0)
+    sethopping!(t, 1, 2, [-1, 0, 0], 1.0)
+    proj = calproj(t, [[([0, 0, 0], 1, 1.0)], [([1, 0, 0], 1, 1.0)]], [1, 2], [0.5, 0.0, 0.0])
+    @assert abs(proj[1, 1]) ≈ 1/√2
+    @assert proj[2, 1]/proj[1, 1] ≈ -1
+end
+
 graphene_test()
 line_test()
 cluster_test()
 test_spin()
+test_proj()

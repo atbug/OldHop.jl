@@ -1,7 +1,8 @@
 module Hop
 using StaticArrays
 
-export TightBindingModel, sethopping!, calhamiltonian, caleig, calband, makesupercell, cutedge, addmagneticfield
+export TightBindingModel, sethopping!, calhamiltonian, caleig, calband,
+    makesupercell, cutedge, addmagneticfield, calproj
 
 
 struct TightBindingModel
@@ -133,7 +134,7 @@ If calegvecs is true, `(egvals::Vector{Float64}, egvecs::Matrix{Complex128})`,
 otherwise just `egvals::Vector{Float64}`. Eigenvectors are stored in columns
 and eigenvalues are sorted from small to large.
 """
-function caleig(t::TightBindingModel, k::Vector{<:Real}, calegvecs::Bool=false)
+function caleig(t::TightBindingModel, k::Vector{<:Real}; calegvecs::Bool=false)
     @assert size(k) == (3,) "Size of k is not correct."
     hamiltonian = calhamiltonian(t, k)
     if calegvecs
@@ -252,14 +253,17 @@ end
 
 
 """
-    cutedge(t::TightBindingModel, dir::Int64, glueedges::Bool=false) --> TightBindingModel
+```julia
+cutedge(t::TightBindingModel, dir::Int64; glueedges::Bool=false)
+    --> TightBindingModel
+```
 
 Create a D-1 dimensional TightBindingModel from a D dimensional one `t`. The finite
 direction is represented by `dir` following the convention of 1:x, 2:y, 3:z.
 If `glueedges` is true, the returned TightBindingModel will be made periodic in the
 `dir` direction.
 """
-function cutedge(t::TightBindingModel, dir::Int64, glueedges::Bool=false)
+function cutedge(t::TightBindingModel, dir::Int64; glueedges::Bool=false)
     r = deepcopy(t)
     for ((n, m, R), hopping) in r.hoppings
         if abs(R[dir]) > 0
@@ -307,6 +311,28 @@ function addmagneticfield(t::TightBindingModel, B::Real)
         )
     end
     return tm
+end
+
+
+"""
+```julia
+calproj(tm::TightBindingModel, k::Vector{Int64}, lf::Tuple{Vector{Int64},Int64,<:Number}) --> Matrix{Complex128}
+```
+
+calculate overlap
+"""
+function calproj(tm::TightBindingModel, lfs::Vector{Vector{Tuple{Vector{Int64},Int64,Float64}}},
+    bands::Vector{Int64}, k::Vector{Float64})
+    proj = zeros(Complex128, (length(lfs), length(bands)))
+    egvals, egvecs = caleig(tm, k; calegvecs=true)
+    for (ilf, lf) in enumerate(lfs)
+        for (iband, band) in enumerate(bands)
+            for (R, iorbit, value) in lf
+                proj[ilf, iband] += conj(egvecs[iorbit, iband]*exp(2π*im*k⋅R))*value
+            end
+        end
+    end
+    return proj
 end
 
 end
