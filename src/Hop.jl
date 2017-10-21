@@ -2,7 +2,7 @@ module Hop
 using StaticArrays
 
 export TightBindingModel, sethopping!, calhamiltonian, caleig, calband,
-    makesupercell, cutedge, addmagneticfield, calproj
+    makesupercell, cutedge, addmagneticfield, calproj, calwf
 
 
 struct TightBindingModel
@@ -315,24 +315,90 @@ end
 
 
 """
-```julia
-calproj(tm::TightBindingModel, k::Vector{Int64}, lf::Tuple{Vector{Int64},Int64,<:Number}) --> Matrix{Complex128}
-```
 
-calculate overlap
+
+lfs is stored in format {R: ⟨Rn|̄m⟩}.
 """
-function calproj(tm::TightBindingModel, lfs::Vector{Vector{Tuple{Vector{Int64},Int64,Float64}}},
-    bands::Vector{Int64}, k::Vector{Float64})
-    proj = zeros(Complex128, (length(lfs), length(bands)))
-    egvals, egvecs = caleig(tm, k; calegvecs=true)
-    for (ilf, lf) in enumerate(lfs)
-        for (iband, band) in enumerate(bands)
-            for (R, iorbit, value) in lf
-                proj[ilf, iband] += conj(egvecs[iorbit, iband]*exp(2π*im*k⋅R))*value
-            end
-        end
+function calproj(t::TightBindingModel, lfs::Dict{Vector{Int64}, Matrix{T1}},
+    bands::Vector{Int64}, k::Vector{T2}) where T1<:Number where T2<:Real
+    nlfs = 0
+    for (R, overlap) in lfs
+        nlfs = size(overlap, 2)
+        break
+    end
+    proj = zeros(Complex128, (length(bands), nlfs))
+    egvecs = caleig(t, k; calegvecs=true)[2][:, bands]
+    for (R, overlap) in lfs
+        proj += exp(-im*2π*k⋅R)*(egvecs')*overlap
     end
     return proj
 end
+
+
+function _smooth(t, lfs::Dict{Vector{Int64}, Matrix{T1}},
+    bands::Vector{Int64}, k::Vector{T2}) where T1<:Number where T2<:Real
+    A = calproj(t, lfs, bands, k)
+    S = A'*A
+    @assert real(det(S)) > 0.1
+    egvecs = caleig(t, k, calegvecs=true)[2]
+    return egvecs[:, bands]*A*inv(sqrtm(S))
+end
+
+
+function calwf(t::TightBindingModel, twfs::Dict{Vector{Int64}, Matrix{T}},
+    bands::Vector{Int64}, nkmesh::Vector{Int64}, nrmesh::Vector{Int64}) where T<:Number
+    @assert size(nkmesh, 1) == 3
+    @assert size(nrmesh, 1) == 3
+    # generate number of Wannier functions
+    nwfs = 0
+    for (R, overlap) in twfs
+        nwfs = size(overlap, 2)
+        break
+    end
+    @assert nwfs <= length(bands)
+    # generate k points
+    nkpts = prod(nkmesh)
+    kpts = zeros(3, nkpts)
+    i = 1
+    for ikx in 1:nkmesh[1]
+        for iky in 1:nkmesh[2]
+            for ikz in 1:nkmesh[3]
+                kpts[:, i] = [(ikx-1)/nkmesh[1], (iky-1)/nkmesh[2], (ikz-1)/nkmesh[3]]
+                i += 1
+            end
+        end
+    end
+    # generate r points
+    nrpts = prod(2*nrmesh+1)
+    wf = Dict{Vector{Int64}, Matrix{Complex128}}()
+    i = 1
+    for Rx in (-nrmesh[1]):nrmesh[1]
+        for Ry in (-nrmesh[2]):nrmesh[2]
+            for Rz in (-nrmesh[3]):nrmesh[3]
+                wf[[Rx, Ry, Rz]] = zeros(Complex128, (t.norbits, nwfs))
+                i += 1
+            end
+        end
+    end
+    # perform integration
+    for R in keys(wf)
+        for ik in 1:nkpts
+            wf[R] += exp(im*2π*kpts[:, ik]⋅R)*_smooth(t, twfs, bands, kpts[:, ik])
+        end
+    end
+
+    # normalize Wannier function
+    N = zeros(nwfs)
+    for R in keys(wf)
+        N += abs.(diag(wf[R]))
+    end
+    for R in keys(wf)
+        wf[R] = wf[R]./reshape(N, (1, nwfs))
+    end
+
+    return wf
+end
+
+include("plotting.jl")
 
 end

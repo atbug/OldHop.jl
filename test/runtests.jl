@@ -138,9 +138,12 @@ function test_proj()
     t = TightBindingModel(lat, positions)
     sethopping!(t, 1, 2, [0, 0, 0], 1.0)
     sethopping!(t, 1, 2, [-1, 0, 0], 1.0)
-    proj = calproj(t, [[([0, 0, 0], 1, 1.0)], [([1, 0, 0], 1, 1.0)]], [1, 2], [0.5, 0.0, 0.0])
-    @assert abs(proj[1, 1]) ≈ 1/√2
-    @assert proj[2, 1]/proj[1, 1] ≈ -1
+    lfs = Dict{Vector{Int64}, Matrix{Float64}}()
+    lfs[[0, 0, 0]] = [1.0 0; 0 0]
+    lfs[[1, 0, 0]] = [0 1.0; 0 0]
+    proj = calproj(t, lfs, [1, 2], [0.5, 0.0, 0.0])
+    @test abs(proj[1, 1]) ≈ 1/√2
+    @test proj[1, 2]/proj[1, 1] ≈ -1
 end
 
 graphene_test()
