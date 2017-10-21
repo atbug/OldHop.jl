@@ -3,7 +3,7 @@ julia:
  - 0.6
 before_script:
  - sudo apt-get install python-pip python-dev build-essential
- - pip install matplotlib
+ - sudo pip install matplotlib
 after_success:
  - julia -e 'cd(Pkg.dir("Hop")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
  - julia -e 'Pkg.add("Documenter")'
