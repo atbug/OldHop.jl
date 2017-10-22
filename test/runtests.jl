@@ -146,8 +146,27 @@ function test_proj()
     @test proj[1, 2]/proj[1, 1] ≈ -1
 end
 
+
+function test_wf()
+    lat = [1.0 0.5 0.0; 0.0 (√3)/2 0.0; 0.0 0.0 1.0]
+    positions = [1/3 2/3; 1/3 2/3; 0.0 0.0]
+    graphene = TightBindingModel(lat, positions)
+    sethopping!(graphene, 1, 1, [0, 0, 0], -1)
+    sethopping!(graphene, 2, 2, [0, 0, 0], 1)
+    sethopping!(graphene, 1, 2, [0, 0, 0], 1.0)
+    sethopping!(graphene, 2, 1, [1, 0, 0], 1.0)
+    sethopping!(graphene, 2, 1, [0, 1, 0], 1.0)
+    lfs = Dict{Vector{Int64}, Matrix{Complex128}}()
+    lfs[[0, 0, 0]] = reshape([1.0; 0.0], (2, 1))
+    wf = calwf(graphene, lfs, [1,], [20, 20, 1], [0, 0, 0])
+    ratio = wf[[0, 0, 0]] ./ [0.8862394970114095, -0.25949313060996865]
+    ratio[2] / ratio[1] ≈ 1.0
+end
+
+
 graphene_test()
 line_test()
 cluster_test()
 test_spin()
 test_proj()
+test_wf()

@@ -390,10 +390,10 @@ function calwf(t::TightBindingModel, twfs::Dict{Vector{Int64}, Matrix{T}},
     # normalize Wannier function
     N = zeros(nwfs)
     for R in keys(wf)
-        N += abs.(diag(wf[R]))
+        N += diag(wf[R]'*wf[R])
     end
     for R in keys(wf)
-        wf[R] = wf[R]./reshape(N, (1, nwfs))
+        wf[R] = wf[R]./reshape(sqrt.(N), (1, nwfs))
     end
 
     return wf
