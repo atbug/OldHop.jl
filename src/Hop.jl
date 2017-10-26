@@ -329,7 +329,7 @@ function calproj(t::TightBindingModel, lfs::Dict{Vector{Int64}, Matrix{T1}},
     proj = zeros(Complex128, (length(bands), nlfs))
     egvecs = caleig(t, k; calegvecs=true)[2][:, bands]
     for (R, overlap) in lfs
-        proj += exp(-im*2π*k⋅R)*(egvecs')*overlap
+        proj += exp(-im*2π*(k⋅R))*(egvecs')*overlap
     end
     return proj
 end
@@ -381,9 +381,10 @@ function calwf(t::TightBindingModel, twfs::Dict{Vector{Int64}, Matrix{T}},
         end
     end
     # perform integration
-    for R in keys(wf)
-        for ik in 1:nkpts
-            wf[R] += exp(im*2π*kpts[:, ik]⋅R)*_smooth(t, twfs, bands, kpts[:, ik])
+    for ik in 1:nkpts
+        Utilde = _smooth(t, twfs, bands, kpts[:, ik])
+        for R in keys(wf)
+            wf[R] += exp(im*2π*(kpts[:, ik]⋅R))*Utilde
         end
     end
 
