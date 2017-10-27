@@ -27,6 +27,33 @@ output figure:
 ![graphene](https://i.imgur.com/NowwGtr.png)
 
 
+## Wannier Functions
+```julia
+using Hop
+lat = [1.0 0.5 0.0; 0.0 (√3)/2 0.0; 0.0 0.0 1.0]
+positions = [0/3 1/3; 0/3 1/3; 0.0 0.0]
+
+graphene = TightBindingModel(lat, positions)
+
+sethopping!(graphene, 1, 1, [0, 0, 0], -1)
+sethopping!(graphene, 2, 2, [0, 0, 0], 1)
+sethopping!(graphene, 1, 2, [0, 0, 0], 0.1)
+sethopping!(graphene, 2, 1, [1, 0, 0], 0.1)
+sethopping!(graphene, 2, 1, [0, 1, 0], 0.1)
+
+lfs = Dict{Vector{Int64}, Matrix{Complex128}}()
+lfs[[0, 0, 0]] = reshape([1.0; 0.0], (2, 1))
+wf = calwf(graphene, lfs, [1,], [100, 100, 1], [2, 2, 0]);
+using PyPlot
+pygui(true)
+Hop.Plotting.plotwf(graphene, wf, 1)
+show()
+```
+output figure:
+
+![WF](https://i.imgur.com/bjFf47y.png)
+
+
 ## Hofstadter Butterfly
 
 ```julia

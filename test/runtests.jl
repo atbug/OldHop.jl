@@ -158,9 +158,8 @@ function test_wf()
     sethopping!(graphene, 2, 1, [0, 1, 0], 1.0)
     lfs = Dict{Vector{Int64}, Matrix{Complex128}}()
     lfs[[0, 0, 0]] = reshape([1.0; 0.0], (2, 1))
-    wf = calwf(graphene, lfs, [1,], [20, 20, 1], [0, 0, 0])
-    ratio = wf[[0, 0, 0]] ./ [0.8862394970114095, -0.25949313060996865]
-    ratio[2] / ratio[1] ≈ 1.0
+    wf = calwf(graphene, lfs, [1,], [20, 20, 1], [2, 2, 0])
+    @test isapprox(wf[[0, 0, 0]][2, 1], wf[[-1, 0, 0]][2, 1], atol=1.0e-5)
 end
 
 
