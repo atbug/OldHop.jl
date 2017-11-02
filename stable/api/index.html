@@ -1,4 +1,7 @@
 
+
+
+
 <!DOCTYPE html>
 <html lang="en" class="no-js">
   <head>
@@ -18,7 +21,7 @@
       
         <meta name="lang:clipboard.copied" content="Copied to clipboard">
       
-        <meta name="lang:search.languages" content="">
+        <meta name="lang:search.language" content="en">
       
         <meta name="lang:search.result.none" content="No matching documents">
       
@@ -28,10 +31,8 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      
-        <link rel="shortcut icon" href="../assets/images/favicon.png">
-      
-      <meta name="generator" content="mkdocs-0.16.3, mkdocs-material-1.12.2">
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-0.17.1, mkdocs-material-2.0.2">
     
     
       
@@ -39,17 +40,14 @@
       
     
     
+      <link rel="stylesheet" href="../assets/stylesheets/application-5b1b46901f.css">
+      
+    
+    
       <script src="../assets/javascripts/modernizr-e826f8942a.js"></script>
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application-04ea671600.css">
       
-    
-    
-      
-        
-        
-        
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
@@ -60,9 +58,6 @@
     
     
   </head>
-  
-  
-  
   
     <body>
   
@@ -84,7 +79,7 @@
       <div class="md-flex__cell md-flex__cell--shrink">
         <a href="../examples/" title="Hop.jl" class="md-header-nav__button md-logo">
           
-            <i class="md-icon md-icon--home"></i>
+            <i class="md-icon"></i>
           
         </a>
       </div>
@@ -103,8 +98,9 @@
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
-          <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
           
+            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
+            
 <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="search"></label>
   <div class="md-search__inner">
@@ -125,6 +121,7 @@
     </div>
   </div>
 </div>
+          
         
       </div>
       
@@ -136,7 +133,7 @@
   
 
 
-  <a href="https://github.com/mistguy/Hop.jl" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="https://github.com/mistguy/Hop.jl/" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -158,8 +155,6 @@
     
     <div class="md-container">
       
-      
-      
       <main class="md-main">
         <div class="md-main__inner md-grid" data-md-component="container">
           
@@ -171,7 +166,7 @@
   <label class="md-nav__title md-nav__title--site" for="drawer">
     <span class="md-nav__button md-logo">
       
-        <i class="md-icon md-icon--home"></i>
+        <i class="md-icon"></i>
       
     </span>
     Hop.jl
@@ -184,7 +179,7 @@
   
 
 
-  <a href="https://github.com/mistguy/Hop.jl" title="Go to repository" class="md-source" data-md-source="github">
+  <a href="https://github.com/mistguy/Hop.jl/" title="Go to repository" class="md-source" data-md-source="github">
     
       <div class="md-source__icon">
         <svg viewBox="0 0 24 24" width="24" height="24">
@@ -227,9 +222,43 @@
       
     
     
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        API reference
+      </label>
+    
     <a href="./" title="API reference" class="md-nav__link md-nav__link--active">
       API reference
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hop" title="Hop" class="md-nav__link">
+    Hop
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hopplotting" title="Hop.plotting" class="md-nav__link">
+    Hop.plotting
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -251,6 +280,27 @@
     
   
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hop" title="Hop" class="md-nav__link">
+    Hop
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hopplotting" title="Hop.plotting" class="md-nav__link">
+    Hop.plotting
+  </a>
+  
+</li>
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -266,6 +316,8 @@
                 
                 <p><a id='API-reference-1'></a></p>
 <h1 id="api-reference">API reference</h1>
+<p><a id='Hop-1'></a></p>
+<h2 id="hop">Hop</h2>
 <p><a id='Hop.TightBindingModel' href='#Hop.TightBindingModel'>#</a>
 <strong><code>Hop.TightBindingModel</code></strong> &mdash; <em>Type</em>.</p>
 <p>A tight binding model.</p>
@@ -274,7 +326,7 @@
 <ul>
 <li><code>lat::Matrix{Float64}</code>: lattice vector. Lattice vectors should be provided in columns.</li>
 <li><code>positions::Matrix{Float64}</code>: atom positions in reduced coordinate. Atom positions should be provided in columns.</li>
-<li><code>nspins::Int64=1</code>: 1 for spinless systems and 2 for spinful systems. If <code>nspin</code> is 2, <code>norbits</code> will be twice the number of <code>size(positions, 1)</code>. Orbits are ordered as (|1↑⟩, |1↓⟩, |2↑⟩, |2↓⟩, ...).</li>
+<li><code>spinful::Bool=false</code>: false for spinless systems and true for spinful systems. If <code>spinful</code> is true, <code>norbits</code> will be twice the number of <code>size(positions, 1)</code>. Orbits are ordered as (|1↑⟩, |1↓⟩, |2↑⟩, |2↓⟩, ...).</li>
 </ul>
 <p><strong>Fields</strong></p>
 <ul>
@@ -282,17 +334,17 @@
 <li><code>lat::Matrix{Float64}</code>: lattice vectors stored in columns.</li>
 <li><code>rlat::Matrix{Float64}</code>: reciprocal lattice vectors stored in columns.</li>
 <li><code>positions::Matrix{Float64}</code>: position of orbits in reduced coordinate stored in columns.</li>
-<li><code>hoppings::Dict{Tuple{Int64,Int64,SVector{3,Int64}},Complex128}</code>: hoppings.  Hopping example: (1, 1, [1, 0, 0]) =&gt; 1.0+0.0im indicates hopping from orbit 1  in unit cell labeled by [1, 0, 0] to orbit 1 in home unit cell is 1.0.</li>
+<li><code>hoppings::Dict{SVector{3,Int64},Matrix{Complex128}}</code>: hoppings stored as  R-&gt;⟨0n|H|Rm⟩.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d233d06b0b158a134f72f1e1989dde0abcc8dd56/src/Hop.jl#L22-L46' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/4809e555fad066c1882178d6ef8224170fa04c9f/src/Hop.jl#L22-L45' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.sethopping!' href='#Hop.sethopping!'>#</a>
 <strong><code>Hop.sethopping!</code></strong> &mdash; <em>Function</em>.</p>
-<div class="codehilite"><pre><span></span>sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping)
+<div class="codehilite"><pre><span></span><span class="nt">sethopping</span><span class="o">!(</span><span class="nt">t</span><span class="p">::</span><span class="nd">TightBindingModel</span><span class="o">,</span> <span class="nt">n</span><span class="p">::</span><span class="nd">Int64</span><span class="o">,</span> <span class="nt">m</span><span class="p">::</span><span class="nd">Int64</span><span class="o">,</span> <span class="nt">R</span><span class="p">::</span><span class="nd">Vector</span><span class="p">{</span><span class="err">Int64</span><span class="p">}</span><span class="o">,</span> <span class="nt">hopping</span><span class="o">;</span> <span class="nt">mode</span><span class="p">::</span><span class="nd">Char</span><span class="o">=</span><span class="s1">&#39;a&#39;</span><span class="o">)</span>
 </pre></div>
 
 
-<p>Set ⟨0n|H|Rm⟩ to <code>hopping</code>. <code>hopping::Number</code> for spinless systems and <code>hopping::Matrix{&lt;:Number}</code> for spinful systems. For spinful systems, <code>size(hopping)</code> should be (2, 2) and the basis for <code>hopping</code> is (|↑⟩, |↓⟩).</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d233d06b0b158a134f72f1e1989dde0abcc8dd56/src/Hop.jl#L69-L75' class='documenter-source'>source</a><br></p>
+<p>Set ⟨0n|H|Rm⟩ to <code>hopping</code>. <code>hopping::Number</code> for spinless systems and <code>hopping::Matrix{&lt;:Number}</code> for spinful systems. For spinful systems, <code>size(hopping)</code> should be (2, 2) and the basis for <code>hopping</code> is (|↑⟩, |↓⟩). <code>mode</code> has two possible values: 'a' for add mode and 's' for set or reset mode.</p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/4809e555fad066c1882178d6ef8224170fa04c9f/src/Hop.jl#L68-L75' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calhamiltonian' href='#Hop.calhamiltonian'>#</a>
 <strong><code>Hop.calhamiltonian</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span>calhamiltonian(t::TightBindingModel, k::Vector{&lt;:Real}) --&gt; Matrix{Complex128}
@@ -300,7 +352,7 @@
 
 
 <p>Calculate Hamiltonian of a TightBindingModel t for a specific k point. k should be provided in reduced coordinate.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d233d06b0b158a134f72f1e1989dde0abcc8dd56/src/Hop.jl#L111-L116' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/4809e555fad066c1882178d6ef8224170fa04c9f/src/Hop.jl#L112-L117' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.caleig' href='#Hop.caleig'>#</a>
 <strong><code>Hop.caleig</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span>caleig(t::TightBindingModel, k::Vector{&lt;:Real}, calegvecs::Bool=false)
@@ -310,7 +362,7 @@
 <p>Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coordinate.</p>
 <p><strong>Return</strong></p>
 <p>If calegvecs is true, <code>(egvals::Vector{Float64}, egvecs::Matrix{Complex128})</code>, otherwise just <code>egvals::Vector{Float64}</code>. Eigenvectors are stored in columns and eigenvalues are sorted from small to large.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d233d06b0b158a134f72f1e1989dde0abcc8dd56/src/Hop.jl#L127-L136' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/4809e555fad066c1882178d6ef8224170fa04c9f/src/Hop.jl#L128-L137' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calband' href='#Hop.calband'>#</a>
 <strong><code>Hop.calband</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span>calband(t::TightBindingModel, kpath::Matrix{&lt;:Real}, ndiv::Int64) --&gt; (Vector{Float64}, Matrix{Float64})
@@ -318,7 +370,7 @@
 
 
 <p>Calculate bands. <code>kpath</code> is a (3, x) size matrix where x is an even number and should be provided in reduced coordinates. This function returns (<code>kdist</code>, <code>egvals</code>). <code>kdist</code> is the distance of k points and <code>egvals</code> is the energies of band stored in column at each k.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d233d06b0b158a134f72f1e1989dde0abcc8dd56/src/Hop.jl#L155-L162' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/4809e555fad066c1882178d6ef8224170fa04c9f/src/Hop.jl#L152-L159' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.makesupercell' href='#Hop.makesupercell'>#</a>
 <strong><code>Hop.makesupercell</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span>makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64}) --&gt; TightBindingModel
@@ -326,7 +378,7 @@
 
 
 <p>Create a supercell out of a TightBindingModel t. scrdlat is a 3x3 matrix representing supercell reduced lattice vector in columns.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d233d06b0b158a134f72f1e1989dde0abcc8dd56/src/Hop.jl#L187-L192' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/4809e555fad066c1882178d6ef8224170fa04c9f/src/Hop.jl#L184-L189' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.cutedge' href='#Hop.cutedge'>#</a>
 <strong><code>Hop.cutedge</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span><span class="n">cutedge</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="n">TightBindingModel</span><span class="p">,</span> <span class="n">dir</span><span class="o">::</span><span class="kt">Int64</span><span class="p">;</span> <span class="n">glueedges</span><span class="o">::</span><span class="kt">Bool</span><span class="o">=</span><span class="kc">false</span><span class="p">)</span>
@@ -335,7 +387,7 @@
 
 
 <p>Create a D-1 dimensional TightBindingModel from a D dimensional one <code>t</code>. The finite direction is represented by <code>dir</code> following the convention of 1:x, 2:y, 3:z. If <code>glueedges</code> is true, the returned TightBindingModel will be made periodic in the <code>dir</code> direction.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d233d06b0b158a134f72f1e1989dde0abcc8dd56/src/Hop.jl#L255-L265' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/4809e555fad066c1882178d6ef8224170fa04c9f/src/Hop.jl#L257-L267' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.addmagneticfield' href='#Hop.addmagneticfield'>#</a>
 <strong><code>Hop.addmagneticfield</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span>addmagneticfield(t::TightBindingModel, B::Real) --&gt; TightBindingModel
@@ -348,7 +400,31 @@
 <li><code>t::TightBindingModel</code>: a TightBindingModel.</li>
 <li><code>B::Float64</code>: magnetic field in z direction. B is actually Be/h, thus its unit is 1/[length]^2. e here is fundamental charge. Since electron charge is -e, positive B means -z direction for electron system.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d233d06b0b158a134f72f1e1989dde0abcc8dd56/src/Hop.jl#L293-L302' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/4809e555fad066c1882178d6ef8224170fa04c9f/src/Hop.jl#L302-L311' class='documenter-source'>source</a><br></p>
+<p><a id='Hop.calproj' href='#Hop.calproj'>#</a>
+<strong><code>Hop.calproj</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span><span class="n">calproj</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="n">TightBindingModel</span><span class="p">,</span> <span class="n">lfs</span><span class="o">::</span><span class="kt">Dict</span><span class="p">{</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Int64</span><span class="p">},</span> <span class="kt">Matrix</span><span class="p">{</span><span class="n">T1</span><span class="p">}},</span>
+    <span class="n">bands</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Int64</span><span class="p">},</span> <span class="n">k</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="n">T2</span><span class="p">})</span> <span class="n">where</span> <span class="n">T1</span><span class="o">&lt;:</span><span class="kt">Number</span> <span class="n">where</span> <span class="n">T2</span><span class="o">&lt;:</span><span class="kt">Real</span>
+    <span class="o">--&gt;</span> <span class="kt">Matrix</span><span class="p">{</span><span class="kt">Complex</span><span class="p">{</span><span class="kt">Float64</span><span class="p">}}</span>
+</pre></div>
+
+
+<p>calculate ⟨u_nk|g_m⟩, where g is a localized function. <code>lfs</code> is stored in format {R: ⟨Rn|gm⟩}.</p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/4809e555fad066c1882178d6ef8224170fa04c9f/src/Hop.jl#L330-L339' class='documenter-source'>source</a><br></p>
+<p><a id='Hop.calwf' href='#Hop.calwf'>#</a>
+<strong><code>Hop.calwf</code></strong> &mdash; <em>Function</em>.</p>
+<div class="codehilite"><pre><span></span><span class="n">calwf</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="n">TightBindingModel</span><span class="p">,</span> <span class="n">twfs</span><span class="o">::</span><span class="kt">Dict</span><span class="p">{</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Int64</span><span class="p">},</span> <span class="kt">Matrix</span><span class="p">{</span><span class="n">T</span><span class="p">}},</span>
+    <span class="n">bands</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Int64</span><span class="p">},</span> <span class="n">nkmesh</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Int64</span><span class="p">},</span> <span class="n">nrmesh</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Int64</span><span class="p">})</span> <span class="n">where</span> <span class="n">T</span><span class="o">&lt;:</span><span class="kt">Number</span>
+    <span class="o">--&gt;</span> <span class="kt">Dict</span><span class="p">{</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Int64</span><span class="p">},</span> <span class="kt">Matrix</span><span class="p">{</span><span class="kt">Complex128</span><span class="p">}}</span>
+</pre></div>
+
+
+<p>calculate wannier functions of <code>bands</code>.</p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/4809e555fad066c1882178d6ef8224170fa04c9f/src/Hop.jl#L367-L374' class='documenter-source'>source</a><br></p>
+<p><a id='Hop.plotting-1'></a></p>
+<h2 id="hopplotting">Hop.plotting</h2>
+<div class="codehilite"><pre><span></span>Hop.Plotting.plotwf
+</pre></div>
                 
                   
                 
@@ -404,10 +480,9 @@
       
     </div>
     
-      <script src="../assets/javascripts/application-946997f430.js"></script>
+      <script src="../assets/javascripts/application-84693e5e49.js"></script>
       
-      
-      <script>app.initialize({version:"0.16.3",url:{base:".."}})</script>
+      <script>app.initialize({version:"0.17.1",url:{base:".."}})</script>
       
         <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
       
