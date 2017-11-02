@@ -66,7 +66,10 @@ end
 
 
 """
-    sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping; mode::Char='a')
+```julia
+sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping;
+    mode::Char='a')
+```
 
 Set ⟨0n|H|Rm⟩ to `hopping`. `hopping::Number` for spinless systems and
 `hopping::Matrix{<:Number}` for spinful systems. For spinful systems,
@@ -110,7 +113,9 @@ end
 
 
 """
-    calhamiltonian(t::TightBindingModel, k::Vector{<:Real}) --> Matrix{Complex128}
+```julia
+calhamiltonian(t::TightBindingModel, k::Vector{<:Real}) --> Matrix{Complex128}
+```
 
 Calculate Hamiltonian of a TightBindingModel t for a specific k point. k should
 be provided in reduced coordinate.
@@ -126,7 +131,9 @@ end
 
 
 """
-    caleig(t::TightBindingModel, k::Vector{<:Real}, calegvecs::Bool=false)
+```julia
+caleig(t::TightBindingModel, k::Vector{<:Real}, calegvecs::Bool=false)
+```
 
 Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coordinate.
 
@@ -150,7 +157,10 @@ end
 
 
 """
-    calband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64) --> (Vector{Float64}, Matrix{Float64})
+```julia
+calband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64)
+    --> (Vector{Float64}, Matrix{Float64})
+```
 
 Calculate bands. `kpath` is a (3, x) size matrix where x is an even number and
 should be provided in reduced coordinates.
@@ -182,7 +192,9 @@ end
 
 
 """
-    makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64}) --> TightBindingModel
+```julia
+makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64}) --> TightBindingModel
+```
 
 Create a supercell out of a TightBindingModel t. scrdlat is a 3x3 matrix representing
 supercell reduced lattice vector in columns.
@@ -300,7 +312,9 @@ end
 
 
 """
-    addmagneticfield(t::TightBindingModel, B::Real) --> TightBindingModel
+```julia
+addmagneticfield(t::TightBindingModel, B::Real) --> TightBindingModel
+```
 
 Add constant magnetic field in z direction for a TightBindingModel.
 # Arguments
@@ -334,7 +348,7 @@ calproj(t::TightBindingModel, lfs::Dict{Vector{Int64}, Matrix{T1}},
     --> Matrix{Complex{Float64}}
 ```
 
-calculate ⟨u_nk|g_m⟩, where g is a localized function.
+Calculate ⟨u_nk|g_m⟩, where g is a localized function.
 `lfs` is stored in format {R: ⟨Rn|gm⟩}.
 """
 function calproj(t::TightBindingModel, lfs::Dict{Vector{Int64}, Matrix{T1}},
@@ -367,10 +381,11 @@ end
 """
 ```julia
 calwf(t::TightBindingModel, twfs::Dict{Vector{Int64}, Matrix{T}},
-    bands::Vector{Int64}, nkmesh::Vector{Int64}, nrmesh::Vector{Int64}) where T<:Number
-    --> Dict{Vector{Int64}, Matrix{Complex128}}
+    bands::Vector{Int64}, nkmesh::Vector{Int64}, nrmesh::Vector{Int64})
+    where T<:Number --> Dict{Vector{Int64}, Matrix{Complex128}}
 ```
-calculate wannier functions of `bands`.
+
+Calculate wannier functions of `bands`.
 """
 function calwf(t::TightBindingModel, twfs::Dict{Vector{Int64}, Matrix{T}},
     bands::Vector{Int64}, nkmesh::Vector{Int64}, nrmesh::Vector{Int64}) where T<:Number
