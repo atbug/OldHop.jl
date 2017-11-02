@@ -1,5 +1,7 @@
 # API reference
 
+## Hop
+
 ```@docs
 TightBindingModel
 sethopping!
@@ -9,4 +11,12 @@ calband
 makesupercell
 cutedge
 addmagneticfield
+calproj
+calwf
+```
+
+## Hop.plotting
+
+```@docs
+Hop.Plotting.plotwf
 ```
