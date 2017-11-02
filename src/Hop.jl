@@ -15,7 +15,7 @@ struct TightBindingModel
     "atom positions"
     positions::Matrix{Float64}
     "hoppings"
-    hoppings::Dict{Tuple{Int64,Int64,SVector{3,Int64}},Complex128}
+    hoppings::Dict{SVector{3,Int64},Matrix{Complex128}}
 end
 
 
@@ -31,8 +31,8 @@ Lower dimensional models should be simulated by vacuum layer.
   Lattice vectors should be provided in columns.
 - `positions::Matrix{Float64}`: atom positions in reduced coordinate.
   Atom positions should be provided in columns.
-- `nspins::Int64=1`: 1 for spinless systems and 2 for spinful systems. If `nspin`
-  is 2, `norbits` will be twice the number of `size(positions, 1)`. Orbits are
+- `spinful::Bool=false`: false for spinless systems and true for spinful systems. If `spinful`
+  is true, `norbits` will be twice the number of `size(positions, 1)`. Orbits are
   ordered as (|1↑⟩, |1↓⟩, |2↑⟩, |2↓⟩, ...).
 
 # Fields
@@ -40,9 +40,8 @@ Lower dimensional models should be simulated by vacuum layer.
 - `lat::Matrix{Float64}`: lattice vectors stored in columns.
 - `rlat::Matrix{Float64}`: reciprocal lattice vectors stored in columns.
 - `positions::Matrix{Float64}`: position of orbits in reduced coordinate stored in columns.
-- `hoppings::Dict{Tuple{Int64,Int64,SVector{3,Int64}},Complex128}`: hoppings.
-   Hopping example: (1, 1, [1, 0, 0]) => 1.0+0.0im indicates hopping from orbit 1
-   in unit cell labeled by [1, 0, 0] to orbit 1 in home unit cell is 1.0.
+- `hoppings::Dict{SVector{3,Int64},Matrix{Complex128}}`: hoppings stored as
+   R->⟨0n|H|Rm⟩.
 """
 function TightBindingModel(lat::Matrix{Float64}, positions::Matrix{Float64}; spinful::Bool=false)
     @assert size(lat) == (3, 3) "Size of lat is not correct."
@@ -67,35 +66,37 @@ end
 
 
 """
-    sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping)
+    sethopping!(t::TightBindingModel, n::Int64, m::Int64, R::Vector{Int64}, hopping; mode::Char='a')
 
 Set ⟨0n|H|Rm⟩ to `hopping`. `hopping::Number` for spinless systems and
 `hopping::Matrix{<:Number}` for spinful systems. For spinful systems,
 `size(hopping)` should be (2, 2) and the basis for `hopping` is (|↑⟩, |↓⟩).
+`mode` has two possible values: 'a' for add mode and 's' for set or reset mode.
 """
 function sethopping!(t::TightBindingModel, n::Int64, m::Int64,
-    R::Union{Vector{Int64},SVector{3,Int64}}, hopping::Number; mode='a')
+    R::Union{Vector{Int64},SVector{3,Int64}}, hopping::Number; mode::Char='a')
     @assert (n in 1:t.norbits) && (m in 1:t.norbits) "No such orbit."
+    if !(R in keys(t.hoppings))
+        @assert !(-R in keys(t.hoppings))
+        t.hoppings[R] = zeros(Complex128, (t.norbits, t.norbits))
+        t.hoppings[-R] = zeros(Complex128, (t.norbits, t.norbits))
+    end
     if mode == 's'
-        t.hoppings[(n, m, R)] = hopping
-        t.hoppings[(m, n, -R)] = conj(hopping)
+        t.hoppings[R][n, m] = hopping
+        t.hoppings[-R][m, n] = conj(hopping)
     elseif mode == 'a'
-        if !((n, m, R) in keys(t.hoppings))
-            @assert !((m, n, -R) in keys(t.hoppings))
-            t.hoppings[(n, m, R)] = 0
-            t.hoppings[(m, n, -R)] = 0
-        end
-        t.hoppings[(n, m, R)] += hopping
+        t.hoppings[R][n, m] += hopping
         if (n, m, R) != (m, n, -R) # not onsite energy
-            t.hoppings[(m, n, -R)] += conj(hopping)
+            t.hoppings[-R][m, n] += conj(hopping)
         end
     end
     return
 end
 
 
+# For spinful system
 function sethopping!(t::TightBindingModel, n::Int64, m::Int64,
-    R::Union{Vector{Int64},SVector{3,Int64}}, hopping::Matrix{<:Number}; mode='a')
+    R::Union{Vector{Int64},SVector{3,Int64}}, hopping::Matrix{<:Number}; mode::Char='a')
     @assert (n in 1:Int64(t.norbits/2)) && (m in 1:Int64(t.norbits)) "No such orbit."
     @assert size(hopping) == (2, 2) "Size of hopping is not correct."
     sethopping!(t, 2n-1, 2m-1, R, hopping[1, 1], mode=mode)
@@ -117,8 +118,8 @@ be provided in reduced coordinate.
 function calhamiltonian(t::TightBindingModel, k::Vector{<:Real})
     @assert size(k) == (3,) "Size of k is not correct."
     h = zeros(Complex128, (t.norbits, t.norbits))
-    for ((n, m, R), hopping) in t.hoppings
-        h[n, m] += exp(2π*im*(k⋅R))*hopping
+    for (R, hopping) in t.hoppings
+        h += exp(2π*im*(k⋅R))*hopping
     end
     return h
 end
@@ -141,11 +142,7 @@ function caleig(t::TightBindingModel, k::Vector{<:Real}; calegvecs::Bool=false)
         (egvals, egvecs) = eig(hamiltonian)
         egvals = real(egvals)
         perm = sortperm(egvals)
-        sortedegvecs = zeros(Complex128, size(egvecs))
-        for i in 1:t.norbits
-            sortedegvecs[:, i] = egvecs[:, perm[i]]
-        end
-        return (egvals[perm], sortedegvecs)
+        return (egvals[perm], egvecs[:, perm])
     else
         return sort(real(eigvals(hamiltonian)))
     end
@@ -235,17 +232,22 @@ function makesupercell(t::TightBindingModel, scrdlat::Matrix{Int64})
             end
         end
     end
-    for i in 1:nucs
-        for ((n, m, R), hopping) in t.hoppings
-            scR = convert(SVector{3, Int64}, fld.(scrdlatinv*(ucs[i]+R), 1))
-            sethopping!(
-                sc,
-                (i-1)*t.norbits+n,
-                (findind(ucs[i]+R-scrdlat*scR, ucs)-1)*t.norbits+m,
-                scR,
-                hopping,
-                mode='s'
-            )
+    for iuc in 1:nucs
+        for (R, hopping) in t.hoppings
+            scR = convert(SVector{3, Int64}, fld.(scrdlatinv*(ucs[iuc]+R), 1))
+            scmbase = (findind(ucs[iuc]+R-scrdlat*scR, ucs)-1)*t.norbits
+            for n in 1:t.norbits
+                for m in 1:t.norbits
+                    sethopping!(
+                        sc,
+                        (iuc-1)*t.norbits+n,
+                        scmbase+m,
+                        scR,
+                        hopping[n, m],
+                        mode='s'
+                    )
+                end
+            end
         end
     end
     return sc
@@ -265,24 +267,31 @@ If `glueedges` is true, the returned TightBindingModel will be made periodic in 
 """
 function cutedge(t::TightBindingModel, dir::Int64; glueedges::Bool=false)
     r = deepcopy(t)
-    for ((n, m, R), hopping) in r.hoppings
+    for (R, hopping) in r.hoppings
         if abs(R[dir]) > 0
-            @assert abs(R[dir]) < 2  "Cutting an edge with glueedges=true is undefined for
-                                     TightBindingModel with next nearest unit cell hopping
-                                     is undefined in that direction."
             if glueedges
-                pop!(r.hoppings, (n, m, R))
-                sethopping!(
-                r,
-                n,
-                m,
-                [0, 0, 0],
-                hopping,
-                mode='s'
-                )
-
+                @assert abs(R[dir]) < 2  "Cutting an edge with glueedges=true is undefined for
+                                         TightBindingModel with next nearest unit cell hopping
+                                         is undefined in that direction."
+                pop!(r.hoppings, R)
+                if R[dir] > 0
+                    newR = convert(Vector{Int64}, R)
+                    newR[dir] = 0
+                    for n in 1:t.norbits
+                        for m in 1:t.norbits
+                            sethopping!(
+                            r,
+                            n,
+                            m,
+                            newR,
+                            hopping[n, m],
+                            mode='a'
+                            )
+                        end
+                    end
+                end
             else
-                pop!(r.hoppings, (n, m, R))
+                pop!(r.hoppings, R)
             end
         end
     end
@@ -302,22 +311,31 @@ Add constant magnetic field in z direction for a TightBindingModel.
 """
 function addmagneticfield(t::TightBindingModel, B::Real)
     tm = deepcopy(t)
-    for ((n, m, R), hopping) in tm.hoppings
-        # landau gauge
-        absolute_position_n = tm.lat*tm.positions[:,n]
-        absolute_position_m = tm.lat*tm.positions[:,m]
-        tm.hoppings[(n, m, R)] = hopping*exp(
-            im*2π*B*(absolute_position_n[2]-absolute_position_m[2])*(absolute_position_n[1]+absolute_position_m[1])/2
-        )
+    for (R, hopping) in tm.hoppings
+        for n in 1:t.norbits
+            for m in 1:t.norbits
+                # landau gauge
+                absolute_position_n = tm.lat*tm.positions[:,n]
+                absolute_position_m = tm.lat*tm.positions[:,m]
+                tm.hoppings[R][n, m] = hopping[n, m]*exp(
+                    im*2π*B*(absolute_position_n[2]-absolute_position_m[2])*(absolute_position_n[1]+absolute_position_m[1])/2
+                )
+            end
+        end
     end
     return tm
 end
 
 
 """
+```julia
+calproj(t::TightBindingModel, lfs::Dict{Vector{Int64}, Matrix{T1}},
+    bands::Vector{Int64}, k::Vector{T2}) where T1<:Number where T2<:Real
+    --> Matrix{Complex{Float64}}
+```
 
-
-lfs is stored in format {R: ⟨Rn|̄m⟩}.
+calculate ⟨u_nk|g_m⟩, where g is a localized function.
+`lfs` is stored in format {R: ⟨Rn|gm⟩}.
 """
 function calproj(t::TightBindingModel, lfs::Dict{Vector{Int64}, Matrix{T1}},
     bands::Vector{Int64}, k::Vector{T2}) where T1<:Number where T2<:Real
@@ -335,6 +353,7 @@ function calproj(t::TightBindingModel, lfs::Dict{Vector{Int64}, Matrix{T1}},
 end
 
 
+
 function _smooth(t, lfs::Dict{Vector{Int64}, Matrix{T1}},
     bands::Vector{Int64}, k::Vector{T2}) where T1<:Number where T2<:Real
     A = calproj(t, lfs, bands, k)
@@ -345,6 +364,14 @@ function _smooth(t, lfs::Dict{Vector{Int64}, Matrix{T1}},
 end
 
 
+"""
+```julia
+calwf(t::TightBindingModel, twfs::Dict{Vector{Int64}, Matrix{T}},
+    bands::Vector{Int64}, nkmesh::Vector{Int64}, nrmesh::Vector{Int64}) where T<:Number
+    --> Dict{Vector{Int64}, Matrix{Complex128}}
+```
+calculate wannier functions of `bands`.
+"""
 function calwf(t::TightBindingModel, twfs::Dict{Vector{Int64}, Matrix{T}},
     bands::Vector{Int64}, nkmesh::Vector{Int64}, nrmesh::Vector{Int64}) where T<:Number
     @assert size(nkmesh, 1) == 3
