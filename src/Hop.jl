@@ -2,7 +2,7 @@ module Hop
 using StaticArrays
 
 export TightBindingModel, sethopping!, calhamiltonian, caleig, calband,
-    makesupercell, cutedge, addmagneticfield, calproj, calwf
+    makesupercell, cutedge, addmagneticfield, calproj, calwf, calwilson
 
 
 struct TightBindingModel
@@ -440,6 +440,46 @@ function calwf(t::TightBindingModel, twfs::Dict{Vector{Int64}, Matrix{T}},
     end
 
     return wf
+end
+
+
+"""
+```julia
+calwilson(t::TightBindingModel, bands::Vector{Int64}, kpath::Matrix{<:Real},
+    ndiv::Int64) --> Vector{Float64}
+```
+
+Calculate Wilson loop. k points in `k_path` are stored in column. `kpath` must
+be closed.
+"""
+function calwilson(t::TightBindingModel, bands::Vector{Int64}, kpath::Matrix{<:Real}, ndiv::Int64)
+    @assert ndiv > 1
+    bands = sort(bands)
+    W = eye(Complex128, length(bands))
+    npath = size(kpath, 2)-1
+
+    klist = zeros(3, npath*ndiv+1)
+    for ipath in 1:npath
+        dk = (kpath[:, ipath+1]-kpath[:, ipath])/ndiv
+        for ik in 1:ndiv
+            klist[:, (ipath-1)*ndiv+ik] = kpath[:, ipath]+dk*(ik-1)
+        end
+    end
+    klist[:, end] = kpath[:, end]
+
+    egvecski = caleig(t, kpath[:, 1], calegvecs=true)[2]
+    egvecsk1 = egvecski
+    egvecsk2 = egvecski
+    for ik in 1:npath*ndiv
+        egvecsk2 = caleig(t, klist[:, ik+1], calegvecs=true)[2]
+        dk = klist[:, ik+1]-klist[:, ik]
+        rdk = diagm(exp.((im*2π*dk'*(t.positions)))')
+        W = egvecsk2[:, bands]'*rdk*(egvecsk1[:, bands])*W
+        egvecsk1 = egvecsk2
+    end
+    W = egvecski[:, bands]'*(egvecsk2[:, bands])*W
+
+    return sort(imag.(log.(eigvals(W))))
 end
 
 include("plotting.jl")

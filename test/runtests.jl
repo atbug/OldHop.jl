@@ -163,9 +163,23 @@ function test_wf()
 end
 
 
+function ssh_test()
+    ssh = TightBindingModel(eye(3, 3), [-0.25 0.25; 0.0 0.0; 0.0 0.0])
+    sethopping!(ssh, 1, 2, [0, 0, 0], 1.0)
+    sethopping!(ssh, 2, 1, [1, 0, 0], 0.5)
+    @test isapprox(calwilson(ssh, [1, ], [0.0 1.0; 0.0 0.0; 0.0 0.0], 1000)[1], 0, atol=1.0e-5)
+    ssh = TightBindingModel(eye(3, 3), [-0.25 0.25; 0.0 0.0; 0.0 0.0])
+    sethopping!(ssh, 1, 2, [0, 0, 0], 1.0)
+    sethopping!(ssh, 2, 1, [1, 0, 0], 2.5)
+    @test isapprox(abs(calwilson(ssh, [1, ], [0.0 1.0; 0.0 0.0; 0.0 0.0], 1000)[1]), π, atol=1.0e-5)
+    @test isapprox(calwilson(ssh, [1, 2], [0.0 1.0; 0.0 0.0; 0.0 0.0], 1000), [-π/2, π/2], atol=1.0e-5)
+end
+
+
 graphene_test()
 line_test()
 cluster_test()
 test_spin()
 test_proj()
 test_wf()
+ssh_test()

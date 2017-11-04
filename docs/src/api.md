@@ -13,6 +13,7 @@ cutedge
 addmagneticfield
 calproj
 calwf
+calwilson
 ```
 
 ## Hop.plotting
