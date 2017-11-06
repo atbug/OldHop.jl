@@ -454,6 +454,7 @@ be closed.
 """
 function calwilson(t::TightBindingModel, bands::Vector{Int64}, kpath::Matrix{<:Real}, ndiv::Int64)
     @assert ndiv > 1
+    @assert size(kpath, 1) == 3
     bands = sort(bands)
     W = eye(Complex128, length(bands))
     npath = size(kpath, 2)-1
@@ -473,7 +474,7 @@ function calwilson(t::TightBindingModel, bands::Vector{Int64}, kpath::Matrix{<:R
     for ik in 1:npath*ndiv
         egvecsk2 = caleig(t, klist[:, ik+1], calegvecs=true)[2]
         dk = klist[:, ik+1]-klist[:, ik]
-        rdk = diagm(exp.((im*2π*dk'*(t.positions)))')
+        rdk = diagm(exp.((im*2π*(t.positions')*dk)))
         W = egvecsk2[:, bands]'*rdk*(egvecsk1[:, bands])*W
         egvecsk1 = egvecsk2
     end
