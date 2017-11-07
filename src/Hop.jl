@@ -149,7 +149,7 @@ function caleig(t::TightBindingModel, k::Vector{<:Real}; calegvecs::Bool=false)
     @assert size(k) == (3,) "Size of k is not correct."
     hamiltonian = calhamiltonian(t, k)
     if calegvecs
-        (egvals, egvecs) = eig(Hermitian(hamiltonian))
+        (egvals, egvecs) = eig(hamiltonian)
         perm = sortperm(egvals)
         return (egvals[perm], egvecs[:, perm])
     else
