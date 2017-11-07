@@ -126,7 +126,10 @@ function calhamiltonian(t::TightBindingModel, k::Vector{<:Real})
     for (R, hopping) in t.hoppings
         h += exp(2π*im*(k⋅R))*hopping
     end
-    return h
+    for i in 1:t.norbits
+        h[i, i] = real(h[i, i])
+    end
+    return Hermitian(h)
 end
 
 
@@ -146,12 +149,11 @@ function caleig(t::TightBindingModel, k::Vector{<:Real}; calegvecs::Bool=false)
     @assert size(k) == (3,) "Size of k is not correct."
     hamiltonian = calhamiltonian(t, k)
     if calegvecs
-        (egvals, egvecs) = eig(hamiltonian)
-        egvals = real(egvals)
+        (egvals, egvecs) = eig(Hermitian(hamiltonian))
         perm = sortperm(egvals)
         return (egvals[perm], egvecs[:, perm])
     else
-        return sort(real(eigvals(hamiltonian)))
+        return sort(eigvals(hamiltonian))
     end
 end
 
