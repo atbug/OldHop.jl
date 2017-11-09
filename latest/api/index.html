@@ -336,7 +336,7 @@
 <li><code>positions::Matrix{Float64}</code>: position of orbits in reduced coordinate stored in columns.</li>
 <li><code>hoppings::Dict{SVector{3,Int64},Matrix{Complex128}}</code>: hoppings stored as  R-&gt;⟨0n|H|Rm⟩.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/b669fb478dd2d4854cf5bae77c9a34910e97bb9c/src/Hop.jl#L22-L45' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/5ada5be06e7e0b8ba08564c483d66dc87bce47a4/src/Hop.jl#L23-L46' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.sethopping!' href='#Hop.sethopping!'>#</a>
 <strong><code>Hop.sethopping!</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span><span class="n">sethopping!</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="n">TightBindingModel</span><span class="p">,</span> <span class="n">n</span><span class="o">::</span><span class="kt">Int64</span><span class="p">,</span> <span class="n">m</span><span class="o">::</span><span class="kt">Int64</span><span class="p">,</span> <span class="n">R</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Int64</span><span class="p">},</span> <span class="n">hopping</span><span class="p">;</span>
@@ -345,7 +345,7 @@
 
 
 <p>Set ⟨0n|H|Rm⟩ to <code>hopping</code>. <code>hopping::Number</code> for spinless systems and <code>hopping::Matrix{&lt;:Number}</code> for spinful systems. For spinful systems, <code>size(hopping)</code> should be (2, 2) and the basis for <code>hopping</code> is (|↑⟩, |↓⟩). <code>mode</code> has two possible values: 'a' for add mode and 's' for set or reset mode.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/b669fb478dd2d4854cf5bae77c9a34910e97bb9c/src/Hop.jl#L68-L78' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/5ada5be06e7e0b8ba08564c483d66dc87bce47a4/src/Hop.jl#L69-L79' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calhamiltonian' href='#Hop.calhamiltonian'>#</a>
 <strong><code>Hop.calhamiltonian</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span><span class="n">calhamiltonian</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="n">TightBindingModel</span><span class="p">,</span> <span class="n">k</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="o">&lt;:</span><span class="kt">Real</span><span class="p">})</span> <span class="o">--&gt;</span> <span class="kt">Matrix</span><span class="p">{</span><span class="kt">Complex128</span><span class="p">}</span>
@@ -353,7 +353,7 @@
 
 
 <p>Calculate Hamiltonian of a TightBindingModel t for a specific k point. k should be provided in reduced coordinate.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/b669fb478dd2d4854cf5bae77c9a34910e97bb9c/src/Hop.jl#L115-L122' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/5ada5be06e7e0b8ba08564c483d66dc87bce47a4/src/Hop.jl#L116-L123' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.caleig' href='#Hop.caleig'>#</a>
 <strong><code>Hop.caleig</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span><span class="n">caleig</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="n">TightBindingModel</span><span class="p">,</span> <span class="n">k</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="o">&lt;:</span><span class="kt">Real</span><span class="p">},</span> <span class="n">calegvecs</span><span class="o">::</span><span class="kt">Bool</span><span class="o">=</span><span class="kc">false</span><span class="p">)</span>
@@ -363,7 +363,7 @@
 <p>Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coordinate.</p>
 <p><strong>Return</strong></p>
 <p>If calegvecs is true, <code>(egvals::Vector{Float64}, egvecs::Matrix{Complex128})</code>, otherwise just <code>egvals::Vector{Float64}</code>. Eigenvectors are stored in columns and eigenvalues are sorted from small to large.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/b669fb478dd2d4854cf5bae77c9a34910e97bb9c/src/Hop.jl#L136-L147' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/5ada5be06e7e0b8ba08564c483d66dc87bce47a4/src/Hop.jl#L137-L148' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calband' href='#Hop.calband'>#</a>
 <strong><code>Hop.calband</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span><span class="n">calband</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="n">TightBindingModel</span><span class="p">,</span> <span class="n">kpath</span><span class="o">::</span><span class="kt">Matrix</span><span class="p">{</span><span class="o">&lt;:</span><span class="kt">Real</span><span class="p">},</span> <span class="n">ndiv</span><span class="o">::</span><span class="kt">Int64</span><span class="p">)</span>
@@ -372,7 +372,7 @@
 
 
 <p>Calculate bands. <code>kpath</code> is a (3, x) size matrix where x is an even number and should be provided in reduced coordinates. This function returns (<code>kdist</code>, <code>egvals</code>). <code>kdist</code> is the distance of k points and <code>egvals</code> is the energies of band stored in column at each k.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/b669fb478dd2d4854cf5bae77c9a34910e97bb9c/src/Hop.jl#L161-L171' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/5ada5be06e7e0b8ba08564c483d66dc87bce47a4/src/Hop.jl#L162-L172' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.makesupercell' href='#Hop.makesupercell'>#</a>
 <strong><code>Hop.makesupercell</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span><span class="n">makesupercell</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="n">TightBindingModel</span><span class="p">,</span> <span class="n">scrdlat</span><span class="o">::</span><span class="kt">Matrix</span><span class="p">{</span><span class="kt">Int64</span><span class="p">})</span> <span class="o">--&gt;</span> <span class="n">TightBindingModel</span>
@@ -380,7 +380,7 @@
 
 
 <p>Create a supercell out of a TightBindingModel t. scrdlat is a 3x3 matrix representing supercell reduced lattice vector in columns.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/b669fb478dd2d4854cf5bae77c9a34910e97bb9c/src/Hop.jl#L196-L203' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/5ada5be06e7e0b8ba08564c483d66dc87bce47a4/src/Hop.jl#L197-L204' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.cutedge' href='#Hop.cutedge'>#</a>
 <strong><code>Hop.cutedge</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span><span class="n">cutedge</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="n">TightBindingModel</span><span class="p">,</span> <span class="n">dir</span><span class="o">::</span><span class="kt">Int64</span><span class="p">;</span> <span class="n">glueedges</span><span class="o">::</span><span class="kt">Bool</span><span class="o">=</span><span class="kc">false</span><span class="p">)</span>
@@ -389,7 +389,7 @@
 
 
 <p>Create a D-1 dimensional TightBindingModel from a D dimensional one <code>t</code>. The finite direction is represented by <code>dir</code> following the convention of 1:x, 2:y, 3:z. If <code>glueedges</code> is true, the returned TightBindingModel will be made periodic in the <code>dir</code> direction.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/b669fb478dd2d4854cf5bae77c9a34910e97bb9c/src/Hop.jl#L271-L281' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/5ada5be06e7e0b8ba08564c483d66dc87bce47a4/src/Hop.jl#L272-L282' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.addmagneticfield' href='#Hop.addmagneticfield'>#</a>
 <strong><code>Hop.addmagneticfield</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span><span class="n">addmagneticfield</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="n">TightBindingModel</span><span class="p">,</span> <span class="n">B</span><span class="o">::</span><span class="kt">Real</span><span class="p">)</span> <span class="o">--&gt;</span> <span class="n">TightBindingModel</span>
@@ -402,7 +402,7 @@
 <li><code>t::TightBindingModel</code>: a TightBindingModel.</li>
 <li><code>B::Float64</code>: magnetic field in z direction. B is actually Be/h, thus its unit is 1/[length]^2. e here is fundamental charge. Since electron charge is -e, positive B means -z direction for electron system.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/b669fb478dd2d4854cf5bae77c9a34910e97bb9c/src/Hop.jl#L316-L327' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/5ada5be06e7e0b8ba08564c483d66dc87bce47a4/src/Hop.jl#L317-L328' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calproj' href='#Hop.calproj'>#</a>
 <strong><code>Hop.calproj</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span><span class="n">calproj</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="n">TightBindingModel</span><span class="p">,</span> <span class="n">lfs</span><span class="o">::</span><span class="kt">Dict</span><span class="p">{</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Int64</span><span class="p">},</span> <span class="kt">Matrix</span><span class="p">{</span><span class="n">T1</span><span class="p">}},</span>
@@ -412,7 +412,7 @@
 
 
 <p>Calculate ⟨u_nk|g_m⟩, where g is a localized function. <code>lfs</code> is stored in format {R: ⟨Rn|gm⟩}.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/b669fb478dd2d4854cf5bae77c9a34910e97bb9c/src/Hop.jl#L346-L355' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/5ada5be06e7e0b8ba08564c483d66dc87bce47a4/src/Hop.jl#L347-L356' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calwf' href='#Hop.calwf'>#</a>
 <strong><code>Hop.calwf</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span><span class="n">calwf</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="n">TightBindingModel</span><span class="p">,</span> <span class="n">twfs</span><span class="o">::</span><span class="kt">Dict</span><span class="p">{</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Int64</span><span class="p">},</span> <span class="kt">Matrix</span><span class="p">{</span><span class="n">T</span><span class="p">}},</span>
@@ -422,7 +422,7 @@
 
 
 <p>Calculate wannier functions of <code>bands</code>.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/b669fb478dd2d4854cf5bae77c9a34910e97bb9c/src/Hop.jl#L383-L391' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/5ada5be06e7e0b8ba08564c483d66dc87bce47a4/src/Hop.jl#L384-L392' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calwilson' href='#Hop.calwilson'>#</a>
 <strong><code>Hop.calwilson</code></strong> &mdash; <em>Function</em>.</p>
 <div class="codehilite"><pre><span></span><span class="n">calwilson</span><span class="p">(</span><span class="n">t</span><span class="o">::</span><span class="n">TightBindingModel</span><span class="p">,</span> <span class="n">bands</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Int64</span><span class="p">},</span> <span class="n">kpath</span><span class="o">::</span><span class="kt">Matrix</span><span class="p">{</span><span class="o">&lt;:</span><span class="kt">Real</span><span class="p">},</span>
@@ -431,7 +431,7 @@
 
 
 <p>Calculate Wilson loop. k points in <code>k_path</code> are stored in column. <code>kpath</code> must be closed.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/b669fb478dd2d4854cf5bae77c9a34910e97bb9c/src/Hop.jl#L448-L456' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/5ada5be06e7e0b8ba08564c483d66dc87bce47a4/src/Hop.jl#L476-L484' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.plotting-1'></a></p>
 <h2 id="hopplotting">Hop.plotting</h2>
 <p><a id='Hop.Plotting.plotwf' href='#Hop.Plotting.plotwf'>#</a>
@@ -442,7 +442,7 @@
 
 
 <p>Plot wannier functions indexed by <code>iwf</code>.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/b669fb478dd2d4854cf5bae77c9a34910e97bb9c/src/plotting.jl#L6-L13' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/5ada5be06e7e0b8ba08564c483d66dc87bce47a4/src/plotting.jl#L6-L13' class='documenter-source'>source</a><br></p>
                 
                   
                 
