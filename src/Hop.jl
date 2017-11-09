@@ -2,7 +2,8 @@ module Hop
 using StaticArrays
 
 export TightBindingModel, sethopping!, calhamiltonian, caleig, calband,
-    makesupercell, cutedge, addmagneticfield, calproj, calwf, calwilson
+    makesupercell, cutedge, addmagneticfield, calproj, calwf, interpolatewf,
+    calwilson
 
 
 struct TightBindingModel
@@ -393,6 +394,9 @@ function calwf(t::TightBindingModel, twfs::Dict{Vector{Int64}, Matrix{T}},
     bands::Vector{Int64}, nkmesh::Vector{Int64}, nrmesh::Vector{Int64}) where T<:Number
     @assert size(nkmesh, 1) == 3
     @assert size(nrmesh, 1) == 3
+    for iband in bands
+        @assert iband in 1:t.norbits
+    end
     # generate number of Wannier functions
     nwfs = 0
     for (R, overlap) in twfs
@@ -441,6 +445,30 @@ function calwf(t::TightBindingModel, twfs::Dict{Vector{Int64}, Matrix{T}},
         wf[R] = wf[R]./reshape(sqrt.(N), (1, nwfs))
     end
 
+    return wf
+end
+
+
+"""
+```julia
+interpolatewf(gett, tparams::Vector{Vector{T1}}, twfs::Dict{Vector{Int64}, Matrix{T2}},
+    wparam::Tuple{Vector{Int64},Vector{Int64},Vector{Int64}}, ndiv::Int64)
+    where T1<:Number where T2<:Number --> Dict{Vector{Int64}, Matrix{Complex128}}
+```
+
+Calculate Wannier functions by interpolating between several TightBindingModels.
+"""
+function interpolatewf(gett, tparams::Vector{Vector{T1}}, twfs::Dict{Vector{Int64}, Matrix{T2}},
+    wparam::Tuple{Vector{Int64},Vector{Int64},Vector{Int64}}, ndiv::Int64) where T1<:Number where T2<:Number
+    t = gett(tparams[1]...)
+    wf = calwf(t, twfs, wparam...)
+    for ipath in 1:(length(tparams)-1)
+        for it in 1:ndiv
+            tparam = tparams[ipath]+(tparams[ipath+1]-tparams[ipath])*it/ndiv
+            t = gett(tparam...)
+            wf = calwf(t, wf, wparam...)
+        end
+    end
     return wf
 end
 
