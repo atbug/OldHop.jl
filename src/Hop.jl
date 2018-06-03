@@ -115,7 +115,7 @@ end
 
 """
 ```julia
-calhamiltonian(t::TightBindingModel, k::Vector{<:Real}) --> Matrix{Complex128}
+calhamiltonian(t::TightBindingModel, k::Vector{<:Real}) --> Matrix{ComplexF64}
 ```
 
 Calculate Hamiltonian of a TightBindingModel t for a specific k point. k should
