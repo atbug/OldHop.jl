@@ -1,9 +1,6 @@
 language: julia
 julia:
- - 0.6
-before_script:
- - sudo apt-get install python-pip python-dev build-essential
- - sudo pip install matplotlib
+ - 1.0
 after_success:
  - julia -e 'cd(Pkg.dir("Hop")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
  - julia -e 'Pkg.add("Documenter")'
