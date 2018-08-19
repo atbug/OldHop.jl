@@ -1,2 +1,7 @@
+name = "Hop"
+uuid = "defc1d9d-1a91-5c6e-a5d0-6da97266dbc2"
+repo = "https://github.com/mistguy/Hop.jl.git"
+author = ["Chong Wang"]
+
 [deps]
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
