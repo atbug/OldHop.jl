@@ -1,7 +1,8 @@
 name = "Hop"
 uuid = "defc1d9d-1a91-5c6e-a5d0-6da97266dbc2"
-repo = "https://github.com/mistguy/Hop.jl.git"
 author = ["Chong Wang"]
+repo = "https://github.com/mistguy/Hop.jl.git"
 
 [deps]
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"

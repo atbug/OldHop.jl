@@ -7,17 +7,6 @@ TightBindingModel
 sethopping!
 calhamiltonian
 caleig
+caleigvals
 calband
-makesupercell
-cutedge
-addmagneticfield
-calproj
-calwf
-calwilson
-```
-
-## Hop.plotting
-
-```@docs
-Hop.Plotting.plotwf
 ```
