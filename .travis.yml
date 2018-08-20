@@ -1,8 +1,11 @@
 language: julia
 julia:
  - 1.0
+before_install:
+- sudo apt-get update
+- sudo apt-get install python3
 after_success:
  - julia -e 'using Pkg; cd(Pkg.dir("Hop")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
  - julia -e 'using Pkg; Pkg.add("Documenter")'
- - sudo pip install mkdocs-material pygments
+ - sudo pip3 install mkdocs-material pygments
  - julia -e 'using Pkg; cd(Pkg.dir("Hop")); include(joinpath("docs", "make.jl"))'
