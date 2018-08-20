@@ -4,7 +4,8 @@ site_description: julia tight binding library
 site_author:      mistguy
 edit_uri: edit/master/docs/src/
 
-theme: material
+theme:
+    name: readthedocs
 
 extra_css:
   - assets/Documenter.css
