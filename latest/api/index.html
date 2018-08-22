@@ -111,13 +111,16 @@
 <h2 id="hop">Hop</h2>
 <p><a id='Hop.TightBindingModel' href='#Hop.TightBindingModel'>#</a>
 <strong><code>Hop.TightBindingModel</code></strong> &mdash; <em>Type</em>.</p>
+<pre class="codehilite"><code class="language-julia">TightBindingModel(lat::Matrix{Float64}, positions::Matrix{Float64}; spinful::Bool=false)</code></pre>
+
+
 <p>A tight binding model.</p>
 <p>Generally, every tight binding model is three dimensional. Therefore, every lattice vector should have three components. Lower dimensional models should be simulated by vacuum layer.</p>
 <p><strong>Constructor Arguments</strong></p>
 <ul>
-<li><code>lat::Matrix{Float64}</code>: lattice vector. Lattice vectors should be provided in columns.</li>
-<li><code>positions::Matrix{Float64}</code>: atom positions in reduced coordinate. Atom positions should be provided in columns.</li>
-<li><code>spinful::Bool=false</code>: false for spinless systems and true for spinful systems. If <code>spinful</code> is true, <code>norbits</code> will be twice the number of <code>size(positions, 1)</code>. Orbits are ordered as (|1↑⟩, |1↓⟩, |2↑⟩, |2↓⟩, ...).</li>
+<li><code>lat</code>: lattice vector. Lattice vectors should be provided in columns.</li>
+<li><code>positions</code>: atom positions in reduced coordinate. Atom positions should be provided in columns.</li>
+<li><code>spinful</code>: false for spinless systems and true for spinful systems. If <code>spinful</code> is true, <code>norbits</code> will be twice the number of <code>size(positions, 1)</code>. Orbits are ordered as (|1↑⟩, |1↓⟩, |2↑⟩, |2↓⟩, ...).</li>
 </ul>
 <p><strong>Fields</strong></p>
 <ul>
@@ -127,7 +130,7 @@
 <li><code>positions::Matrix{Float64}</code>: position of orbits in reduced coordinate stored in columns.</li>
 <li><code>hoppings::Dict{SVector{3,Int64},Matrix{ComplexF64}}</code>: hoppings stored as  R-&gt;⟨0n|H|Rm⟩.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ef8baded2b9d2d4915680e2fa1b4a5c1aac38b44/src/Hop.jl#L22-L45' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/c2533a440acde6b581c57a1f500adea3ef5ba646/src/Hop.jl#L22-L48' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.sethopping!' href='#Hop.sethopping!'>#</a>
 <strong><code>Hop.sethopping!</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">sethopping!(t::TightBindingModel, n::Int64, m::Int64, R, hopping;
@@ -135,14 +138,14 @@
 
 
 <p>Set ⟨0n|H|Rm⟩ to <code>hopping</code>. <code>hopping::Number</code> for spinless models and <code>hopping::Matrix{&lt;:Number}</code> for spinful models. For spinful models, <code>size(hopping)</code> should be (2, 2) and the basis for <code>hopping</code> is (|↑⟩, |↓⟩). <code>mode</code> has two possible values: :a for add mode and :s for set or reset mode.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ef8baded2b9d2d4915680e2fa1b4a5c1aac38b44/src/Hop.jl#L68-L78' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/c2533a440acde6b581c57a1f500adea3ef5ba646/src/Hop.jl#L71-L81' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calhamiltonian' href='#Hop.calhamiltonian'>#</a>
 <strong><code>Hop.calhamiltonian</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">calhamiltonian(t::TightBindingModel, k::Vector{&lt;:Real}) --&gt; Matrix{ComplexF64}</code></pre>
 
 
 <p>Calculate Hamiltonian of a TightBindingModel t for a specific k point. k should be provided in reduced coordinate.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ef8baded2b9d2d4915680e2fa1b4a5c1aac38b44/src/Hop.jl#L119-L126' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/c2533a440acde6b581c57a1f500adea3ef5ba646/src/Hop.jl#L122-L129' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.caleig' href='#Hop.caleig'>#</a>
 <strong><code>Hop.caleig</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">caleig(t::TightBindingModel, k::Vector{&lt;:Real})</code></pre>
@@ -151,7 +154,7 @@
 <p>Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coordinate.</p>
 <p><strong>Return</strong></p>
 <p><code>(egvals::Vector{Float64}, egvecs::Matrix{ComplexF64})</code>, Eigenvectors are stored in columns and eigenvalues are sorted from small to large.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ef8baded2b9d2d4915680e2fa1b4a5c1aac38b44/src/Hop.jl#L137-L147' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/c2533a440acde6b581c57a1f500adea3ef5ba646/src/Hop.jl#L140-L150' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.caleigvals' href='#Hop.caleigvals'>#</a>
 <strong><code>Hop.caleigvals</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">caleigvals(t::TightBindingModel, k::Vector{&lt;:Real})
@@ -160,7 +163,7 @@
 
 <p>Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coordinate.</p>
 <p>Eigenvalues are sorted from small to large.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ef8baded2b9d2d4915680e2fa1b4a5c1aac38b44/src/Hop.jl#L157-L166' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/c2533a440acde6b581c57a1f500adea3ef5ba646/src/Hop.jl#L160-L169' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calband' href='#Hop.calband'>#</a>
 <strong><code>Hop.calband</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">calband(t::TightBindingModel, kpath::Matrix{&lt;:Real}, ndiv::Int64)
@@ -168,7 +171,7 @@
 
 
 <p>Calculate bands. <code>kpath</code> is a (3, x) size matrix where x is an even number and should be provided in reduced coordinates. This function returns (<code>kdist</code>, <code>egvals</code>). <code>kdist</code> is the distance of k points and <code>egvals</code> is the energies of band stored in column at each k.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/ef8baded2b9d2d4915680e2fa1b4a5c1aac38b44/src/Hop.jl#L174-L184' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/c2533a440acde6b581c57a1f500adea3ef5ba646/src/Hop.jl#L177-L187' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
