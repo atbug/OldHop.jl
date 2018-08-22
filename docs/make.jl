@@ -1,4 +1,4 @@
-using Documenter, Hop
+using Documenter, Hop, Hop.Floquet
 
 makedocs()
 
