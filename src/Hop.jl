@@ -20,6 +20,9 @@ end
 
 
 """
+```julia
+TightBindingModel(lat::Matrix{Float64}, positions::Matrix{Float64}; spinful::Bool=false)
+```
 A tight binding model.
 
 Generally, every tight binding model is three dimensional.
@@ -27,11 +30,11 @@ Therefore, every lattice vector should have three components.
 Lower dimensional models should be simulated by vacuum layer.
 
 # Constructor Arguments
-- `lat::Matrix{Float64}`: lattice vector.
+- `lat`: lattice vector.
   Lattice vectors should be provided in columns.
-- `positions::Matrix{Float64}`: atom positions in reduced coordinate.
+- `positions`: atom positions in reduced coordinate.
   Atom positions should be provided in columns.
-- `spinful::Bool=false`: false for spinless systems and true for spinful systems. If `spinful`
+- `spinful`: false for spinless systems and true for spinful systems. If `spinful`
   is true, `norbits` will be twice the number of `size(positions, 1)`. Orbits are
   ordered as (|1↑⟩, |1↓⟩, |2↑⟩, |2↓⟩, ...).
 
@@ -204,5 +207,7 @@ function calband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64)
     end
     return (kdist, egvals)
 end
+
+include("floquet.jl")
 
 end

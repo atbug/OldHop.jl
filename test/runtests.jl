@@ -1,4 +1,4 @@
-using Hop, Test
+using Hop, Test, LinearAlgebra
 
 let
     lat = [1.0 0.5 0.0; 0.0 (√3)/2 0.0; 0.0 0.0 1.0]
@@ -23,3 +23,5 @@ let
     @test kdist ≈ [0, 2π, 4π]
     @test egvals ≈ [-3.0 -1.0 -3.0; 3.0 1.0 3.0]
 end
+
+include("floquet.jl")
