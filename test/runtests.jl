@@ -24,4 +24,29 @@ let
     @test egvals ≈ [-3.0 -1.0 -3.0; 3.0 1.0 3.0]
 end
 
+let    # Kane-Mele
+    lat = [1 0.5 0; 0 (√3)/2 0; 0 0 1]
+    positions = [1/3 2/3; 1/3 2/3; 0 0]
+    tm = TightBindingModel(lat, positions, spinful=true)
+    σ0 = [1 0; 0 1]
+    σ1 = [0 1; 1 0]
+    σ2 = [0 -im; im 0]
+    σ3 = [1 0; 0 -1]
+    onsite = 1.0
+    t = 1.0
+    so = 0.6*t*0.5
+    sethopping!(tm, 1, 1, [0, 0, 0], σ0*onsite)
+    sethopping!(tm, 2, 2, [0, 0, 0], -σ0*onsite)
+    sethopping!(tm, 1, 2, [0, 0, 0], σ0*t)
+    sethopping!(tm, 1, 2, [0, -1, 0], σ0*t)
+    sethopping!(tm, 1, 2, [-1, 0, 0], σ0*t)
+    sethopping!(tm, 1, 1, [0, 1, 0], -im*so*σ3)
+    sethopping!(tm, 1, 1, [1, 0, 0], im*so*σ3)
+    sethopping!(tm, 1, 1, [1, -1, 0], -im*so*σ3)
+    sethopping!(tm, 2, 2, [0, 1, 0], im*so*σ3)
+    sethopping!(tm, 2, 2, [1, 0, 0], -im*so*σ3)
+    sethopping!(tm, 2, 2, [1, -1, 0], im*so*σ3)
+    @test caleigvals(tm, [2/3, 1/3, 0.0]) ≈ [-2.55885, -0.558846, 0.558846, 2.55885] atol=1.0e-5
+end
+
 include("floquet.jl")

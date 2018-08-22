@@ -10,3 +10,9 @@ caleig
 caleigvals
 calband
 ```
+
+## Hop.Floquet
+
+```@docs
+calfloquethamiltonian
+```
