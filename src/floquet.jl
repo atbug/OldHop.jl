@@ -36,4 +36,23 @@ function calfloquethamiltonian(Hs::Vector{Matrix{T}}, Ω::Real, N::Integer) wher
     return Hermitian(HF)
 end
 
+
+"""
+```julia
+addlight(t::TightBindingModel, A::Vector{<:Number}, Ω::Real, k::Vector{<:Real}, N::Integer)
+    --> Matrix{ComplexF64}
+```
+
+Calculate Floquet Hamiltonian of `t` at `k` point under the illumination of light with frequency Ω.
+Peierls substitution is performed to the lowest order. Only electric field is taken
+into account. The parameter `A` looks like [Ax, Ay, Az] denoting vector potential
+A(t)=[Ax*exp(iΩt), Ay*exp(iΩt), Az*exp(iΩt)]+c.c.. Floquet Hamiltonian is truncated
+up to `N` harmonics.
+"""
+function addlight(t::TightBindingModel, A::Vector{<:Number}, Ω::Real, k::Vector{<:Real}, N::Integer)
+    H0 = calhamiltonian(t, k)
+    t1 = TightBindingModel(t.lat, t.positions)
+    cartesianposition = t.lat*t.positions
+end
+
 end

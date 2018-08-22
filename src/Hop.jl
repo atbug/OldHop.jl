@@ -44,7 +44,7 @@ Lower dimensional models should be simulated by vacuum layer.
 - `rlat::Matrix{Float64}`: reciprocal lattice vectors stored in columns.
 - `positions::Matrix{Float64}`: position of orbits in reduced coordinate stored in columns.
 - `hoppings::Dict{SVector{3,Int64},Matrix{ComplexF64}}`: hoppings stored as
-   R->⟨0n|H|Rm⟩.
+   R->⟨0m|H|Rn⟩.
 """
 function TightBindingModel(lat::Matrix{Float64}, positions::Matrix{Float64}; spinful::Bool=false)
     @assert size(lat) == (3, 3) "Size of lat is not correct."
@@ -70,18 +70,18 @@ end
 
 """
 ```julia
-sethopping!(t::TightBindingModel, n::Int64, m::Int64, R, hopping;
+sethopping!(t::TightBindingModel, m::Int64, n::Int64, R, hopping;
     mode::Symbol=:a)
 ```
 
-Set ⟨0n|H|Rm⟩ to `hopping`. `hopping::Number` for spinless models and
+Set ⟨0m|H|Rn⟩ to `hopping`. `hopping::Number` for spinless models and
 `hopping::Matrix{<:Number}` for spinful models. For spinful models,
 `size(hopping)` should be (2, 2) and the basis for `hopping` is (|↑⟩, |↓⟩).
 `mode` has two possible values: :a for add mode and :s for set or reset mode.
 """
-function sethopping!(t::TightBindingModel, n::Int64, m::Int64, R,
+function sethopping!(t::TightBindingModel, m::Int64, n::Int64, R,
     hopping::Number; mode::Symbol=:a)
-    @assert (n in 1:t.norbits) && (m in 1:t.norbits) "No such orbit."
+    @assert (m in 1:t.norbits) && (n in 1:t.norbits) "No such orbit."
     @assert length(R) == 3 "Size of R is not correct."
     if !(R in keys(t.hoppings))
         @assert !(-R in keys(t.hoppings))
@@ -89,12 +89,12 @@ function sethopping!(t::TightBindingModel, n::Int64, m::Int64, R,
         t.hoppings[-R] = zeros(ComplexF64, (t.norbits, t.norbits))
     end
     if mode == :s
-        t.hoppings[R][n, m] = hopping
-        t.hoppings[-R][m, n] = conj(hopping)
+        t.hoppings[R][m, n] = hopping
+        t.hoppings[-R][n, m] = conj(hopping)
     elseif mode == :a
-        t.hoppings[R][n, m] += hopping
-        if (n, m, R) != (m, n, -R) # not onsite energy
-            t.hoppings[-R][m, n] += conj(hopping)
+        t.hoppings[R][m, n] += hopping
+        if (m, n, R) != (n, m, -R) # not onsite energy
+            t.hoppings[-R][n, m] += conj(hopping)
         end
     else
         error("Unknown mode.")
@@ -104,17 +104,17 @@ end
 
 
 # For spinful model
-function sethopping!(t::TightBindingModel, n::Int64, m::Int64, R,
+function sethopping!(t::TightBindingModel, m::Int64, n::Int64, R,
     hopping::Matrix{<:Number}; mode::Symbol=:a)
     @assert iseven(t.norbits) "Not a spinful model."
-    @assert (n in 1:(t.norbits÷2)) && (m in 1:(t.norbits÷2)) "No such orbit."
+    @assert (m in 1:(t.norbits÷2)) && (n in 1:(t.norbits÷2)) "No such orbit."
     @assert size(hopping) == (2, 2) "Size of hopping is not correct."
-    sethopping!(t, 2n-1, 2m-1, R, hopping[1, 1], mode=mode)
-    sethopping!(t, 2n, 2m-1, R, hopping[2, 1], mode=mode)
-    if (n, m, R) != (m, n, -R) # not onsite energy
-        sethopping!(t, 2n-1, 2m, R, hopping[1, 2], mode=mode)
+    sethopping!(t, 2m-1, 2n-1, R, hopping[1, 1], mode=mode)
+    sethopping!(t, 2m, 2n-1, R, hopping[2, 1], mode=mode)
+    if (m, n, R) != (n, m, -R) # not onsite energy
+        sethopping!(t, 2m-1, 2n, R, hopping[1, 2], mode=mode)
     end
-    sethopping!(t, 2n, 2m, R, hopping[2, 2], mode=mode)
+    sethopping!(t, 2m, 2n, R, hopping[2, 2], mode=mode)
     return nothing
 end
 

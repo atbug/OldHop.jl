@@ -1,4 +1,4 @@
-using Documenter, Hop, Hop.Floquet
+using Documenter, Hop
 
 makedocs()
 
