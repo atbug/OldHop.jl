@@ -31,4 +31,4 @@ savefig("band.png", dpi=500)
 ```
 output figure:
 
-![graphene](https://i.imgur.com/0MkWNr6.png)
+<img src="https://i.imgur.com/PuCVnmC.png" style="width:400px;"/>
