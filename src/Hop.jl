@@ -130,7 +130,7 @@ be provided in reduced coordinate.
 function calhamiltonian(t::TightBindingModel, k::Vector{<:Real})
     @assert size(k) == (3,) "Size of k is not correct."
     h = zeros(ComplexF64, (t.norbits, t.norbits))
-    for (R, hopping) in t.hoppings
+    for (R, hopping) = t.hoppings
         h += exp(2π*im*(k⋅R))*hopping
     end
     return Hermitian(h)
@@ -191,7 +191,7 @@ function calband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64)
     nkpts = ndiv*npaths
     kdist = zeros(nkpts)
     egvals = zeros(t.norbits, nkpts)
-    for ipath in 1:npaths
+    for ipath = 1:npaths
         dk = (kpath[:, 2*ipath]-kpath[:, 2*ipath-1])/(ndiv-1)
         dkn = norm(t.rlat*dk) # real norm of dk
         if ipath == 1
@@ -199,7 +199,7 @@ function calband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64)
         else
             kdist0 = kdist[(ipath-1)*ndiv]
         end
-        for ikpt in 1:ndiv
+        for ikpt = 1:ndiv
             kdist[(ipath-1)*ndiv+ikpt] = dkn*(ikpt-1) + kdist0
             k = kpath[:, 2*ipath-1]+dk*(ikpt-1)
             egvals[:, (ipath-1)*ndiv+ikpt] = caleigvals(t, k)
