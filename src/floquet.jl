@@ -3,7 +3,7 @@ using ..Hop, LinearAlgebra
 
 export calfloquethamiltonian
 
-doc"""
+"""
 ```julia
 calfloquethamiltonian(Hs::Vector{Matrix{Number}}, Ω::Real, N::Integer)
     --> Matrix{ComplexF64}
