@@ -14,7 +14,7 @@ Hamiltonians ``H(t+Ω)=H(t)``.
 
 `Hs` is a list of Hamiltonian looking like ``[H_0, H_1, H_2, ...]``.
 ``H_i`` is coefficient of Fourier expansion of ``H(t)``:
-``H(t)=H_0+(H_1 e^(iΩt)+H_2 e^(2iΩt)+...+c.c.)``.
+``H(t)=H_0+(H_1 e^{iΩt}+H_2 e^{2iΩt}+...+c.c.)``.
 
 The basis of returned Floquet Hamiltonian is
 ``(e^{-iNΩt}, e^{-i(N-1)Ωt}, ..., e^{iNΩt})``
@@ -41,14 +41,14 @@ end
 
 """
 ```julia
-cal_illuminated_hamiltonian(t::TightBindingModel, A::Vector{<:Number}, Ω::Real, k::Vector{<:Real}, N::Integer)
-    --> Matrix{ComplexF64}
+cal_illuminated_hamiltonian(t::TightBindingModel, A::Vector{<:Number}, Ω::Real,
+    k::Vector{<:Real}, N::Integer) --> Matrix{ComplexF64}
 ```
 
 Calculate Floquet Hamiltonian of `t` at `k` point under the illumination of light with frequency Ω.
 Peierls substitution is performed to the lowest order. Only electric field is taken
 into account. The parameter `A` looks like ``[A_x, A_y, A_z]`` denoting vector potential
-``A(t)=[A_x, A_y, A_z]e^(iΩt)+c.c.``. Floquet Hamiltonian is truncated
+``A(t)=[A_x, A_y, A_z]e^{iΩt}+c.c.``. Floquet Hamiltonian is truncated
 up to `N` harmonics.
 """
 function  cal_illuminated_hamiltonian(t::TightBindingModel, A::Vector{<:Number}, Ω::Real, k::Vector{<:Real}, N::Integer)
