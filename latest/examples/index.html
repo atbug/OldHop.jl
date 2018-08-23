@@ -110,7 +110,10 @@
 <p><a id='Graphene-Bands-1'></a></p>
 <h2 id="graphene-bands">Graphene Bands</h2>
 <pre class="codehilite"><code class="language-julia">using Hop
-using Plots
+using PyPlot
+rc(&quot;font&quot;, family=&quot;Times New Roman&quot;)
+rc(&quot;mathtext&quot;, fontset=&quot;cm&quot;)
+rc(&quot;font&quot;, size=10)
 # Lattice vector. Notice that lattice vectors are stored by column.
 lat = [1.0 0.5 0.0; 0.0 (√3)/2 0.0; 0.0 0.0 1.0]
 # Reduced positions of orbits. Notice that positions are stored by column.
@@ -123,18 +126,18 @@ sethopping!(graphene, 2, 1, [1, 0, 0], -1.0) # ⟨2|H|(1, 0, 0)1⟩=-1
 sethopping!(graphene, 2, 1, [0, 1, 0], -1.0) # ⟨2|H|(0, 1, 0)1⟩=-1
 
 kdist, egvals = calband(graphene, [1 0; 0 1; 0 0], 100)
-
-plot(kdist, egvals', label=[&quot;&quot;,&quot;&quot;], lw=2, color=:black, dpi=400,
-    xaxis=(raw&quot;$k$&quot;, font(15, &quot;sans-serif&quot;)),
-    yaxis=(&quot;E(eV)&quot;, font(15, &quot;sans-serif&quot;)),
-    xticks=[],
-    size=(400, 300)
-    )
-savefig(&quot;bands.png&quot;)</code></pre>
+figure(figsize=(3, 2.5))
+plot(kdist, egvals[1, :], &quot;k&quot;)
+plot(kdist, egvals[2, :], &quot;k&quot;)
+xlabel(&quot;&quot;)
+xticks([])
+ylabel(&quot;E(eV)&quot;)
+tight_layout()
+savefig(&quot;band.png&quot;, dpi=500)</code></pre>
 
 
 <p>output figure:</p>
-<p><img alt="graphene" src="https://i.imgur.com/E6Yg6Nx.png" /></p>
+<p><img alt="graphene" src="https://i.imgur.com/0MkWNr6.png" /></p>
               
             </div>
           </div>

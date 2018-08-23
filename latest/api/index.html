@@ -132,7 +132,7 @@
 <li><code>positions::Matrix{Float64}</code>: position of orbits in reduced coordinate stored in columns.</li>
 <li><code>hoppings::Dict{SVector{3,Int64},Matrix{ComplexF64}}</code>: hoppings stored as  R-&gt;⟨0m|H|Rn⟩.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/bd4abc9ff3d74a9c5d54bb743e041558b49bba7c/src/Hop.jl#L22-L48' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d2204830f49572a2adfcefea962223c804de6856/src/Hop.jl#L22-L48' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.sethopping!' href='#Hop.sethopping!'>#</a>
 <strong><code>Hop.sethopping!</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">sethopping!(t::TightBindingModel, m::Int64, n::Int64, R, hopping;
@@ -140,14 +140,14 @@
 
 
 <p>Set ⟨0m|H|Rn⟩ to <code>hopping</code>. <code>hopping::Number</code> for spinless models and <code>hopping::Matrix{&lt;:Number}</code> for spinful models. For spinful models, <code>size(hopping)</code> should be (2, 2) and the basis for <code>hopping</code> is (|↑⟩, |↓⟩). <code>mode</code> has two possible values: :a for add mode and :s for set or reset mode.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/bd4abc9ff3d74a9c5d54bb743e041558b49bba7c/src/Hop.jl#L71-L81' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d2204830f49572a2adfcefea962223c804de6856/src/Hop.jl#L71-L81' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calhamiltonian' href='#Hop.calhamiltonian'>#</a>
 <strong><code>Hop.calhamiltonian</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">calhamiltonian(t::TightBindingModel, k::Vector{&lt;:Real}) --&gt; Matrix{ComplexF64}</code></pre>
 
 
 <p>Calculate Hamiltonian of a TightBindingModel t for a specific k point. k should be provided in reduced coordinate.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/bd4abc9ff3d74a9c5d54bb743e041558b49bba7c/src/Hop.jl#L122-L129' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d2204830f49572a2adfcefea962223c804de6856/src/Hop.jl#L122-L129' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.caleig' href='#Hop.caleig'>#</a>
 <strong><code>Hop.caleig</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">caleig(t::TightBindingModel, k::Vector{&lt;:Real})</code></pre>
@@ -156,7 +156,7 @@
 <p>Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coordinate.</p>
 <p><strong>Return</strong></p>
 <p><code>(egvals::Vector{Float64}, egvecs::Matrix{ComplexF64})</code>, Eigenvectors are stored in columns and eigenvalues are sorted from small to large.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/bd4abc9ff3d74a9c5d54bb743e041558b49bba7c/src/Hop.jl#L140-L150' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d2204830f49572a2adfcefea962223c804de6856/src/Hop.jl#L140-L150' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.caleigvals' href='#Hop.caleigvals'>#</a>
 <strong><code>Hop.caleigvals</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">caleigvals(t::TightBindingModel, k::Vector{&lt;:Real})
@@ -165,7 +165,7 @@
 
 <p>Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coordinate.</p>
 <p>Eigenvalues are sorted from small to large.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/bd4abc9ff3d74a9c5d54bb743e041558b49bba7c/src/Hop.jl#L160-L169' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d2204830f49572a2adfcefea962223c804de6856/src/Hop.jl#L160-L169' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.calband' href='#Hop.calband'>#</a>
 <strong><code>Hop.calband</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">calband(t::TightBindingModel, kpath::Matrix{&lt;:Real}, ndiv::Int64)
@@ -173,7 +173,7 @@
 
 
 <p>Calculate bands. <code>kpath</code> is a (3, x) size matrix where x is an even number and should be provided in reduced coordinates. This function returns (<code>kdist</code>, <code>egvals</code>). <code>kdist</code> is the distance of k points and <code>egvals</code> is the energies of band stored in column at each k.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/bd4abc9ff3d74a9c5d54bb743e041558b49bba7c/src/Hop.jl#L177-L187' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d2204830f49572a2adfcefea962223c804de6856/src/Hop.jl#L177-L187' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.Floquet-1'></a></p>
 <h2 id="hopfloquet">Hop.Floquet</h2>
 <p><a id='Hop.Floquet.calfloquethamiltonian' href='#Hop.Floquet.calfloquethamiltonian'>#</a>
@@ -185,7 +185,7 @@
 <p>Calculate Floquet Hamiltonian. Generally, Floquet theory deals with time periodic Hamiltonians H(t+Ω)=H(t).</p>
 <p><code>Hs</code> is a list of Hamiltonian looking like [H0, H1, H2, ...]. Hi is coefficient of Fourier expansion of H(t): H(t)=H0+H1<em>exp(iΩt)+H2</em>exp(iΩt)+...</p>
 <p>The basis of returned Floquet Hamiltonian is (e^{-iNΩt}, e^{-i(N-1)Ωt}, ..., e^{iNΩt}) where internal degree of freedom is omitted. Therefore, HF<em n-m="n-m">mn=H</em>-mΩδ_{mn}</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/bd4abc9ff3d74a9c5d54bb743e041558b49bba7c/src/floquet.jl#L6-L20' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/d2204830f49572a2adfcefea962223c804de6856/src/floquet.jl#L6-L20' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
