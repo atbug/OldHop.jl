@@ -12,11 +12,13 @@ calfloquethamiltonian(Hs::Vector{Matrix{Number}}, Ω::Real, N::Integer)
 Calculate Floquet Hamiltonian. Generally, Floquet theory deals with time periodic
 Hamiltonians H(t+Ω)=H(t).
 
-`Hs` is a list of Hamiltonian looking like [H0, H1, H2, ...]. Hi is coefficient
-of Fourier expansion of H(t): H(t)=H0+H1*exp(iΩt)+H2*exp(iΩt)+...
+`Hs` is a list of Hamiltonian looking like ``[H_0, H_1, H_2, ...]``.
+``H_i`` is coefficient of Fourier expansion of ``H(t)``:
+``H(t)=H_0+H_1 exp(iΩt)+H_2 exp(iΩt)+...``
 
-The basis of returned Floquet Hamiltonian is (e^{-iNΩt}, e^{-i(N-1)Ωt}, ..., e^{iNΩt})
-where internal degree of freedom is omitted. Therefore, HF_mn=H_{n-m}-mΩδ_{mn}
+The basis of returned Floquet Hamiltonian is
+``(e^{-iNΩt}, e^{-i(N-1)Ωt}, ..., e^{iNΩt})``
+where internal degree of freedom is omitted. Therefore, ``HF_{mn}=H_{n-m}-mΩδ_{mn}``
 """
 function calfloquethamiltonian(Hs::Vector{Matrix{T}}, Ω::Real, N::Integer) where T<:Number
     dim = size(Hs[1], 1)
