@@ -3,14 +3,14 @@ using ..Hop, LinearAlgebra
 
 export calfloquethamiltonian
 
-"""
+doc"""
 ```julia
 calfloquethamiltonian(Hs::Vector{Matrix{Number}}, Ω::Real, N::Integer)
     --> Matrix{ComplexF64}
 ```
 
 Calculate Floquet Hamiltonian. Generally, Floquet theory deals with time periodic
-Hamiltonians H(t+Ω)=H(t).
+Hamiltonians ``H(t+Ω)=H(t)``.
 
 `Hs` is a list of Hamiltonian looking like ``[H_0, H_1, H_2, ...]``.
 ``H_i`` is coefficient of Fourier expansion of ``H(t)``:
@@ -18,7 +18,7 @@ Hamiltonians H(t+Ω)=H(t).
 
 The basis of returned Floquet Hamiltonian is
 ``(e^{-iNΩt}, e^{-i(N-1)Ωt}, ..., e^{iNΩt})``
-where internal degree of freedom is omitted. Therefore, ``HF_{mn}=H_{n-m}-mΩδ_{mn}``
+where internal degree of freedom is omitted. Therefore, ``H^F_{mn}=H_{n-m}-mΩδ_{mn}``
 """
 function calfloquethamiltonian(Hs::Vector{Matrix{T}}, Ω::Real, N::Integer) where T<:Number
     dim = size(Hs[1], 1)
