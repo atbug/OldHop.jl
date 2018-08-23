@@ -4,7 +4,10 @@
 
 ```julia
 using Hop
-using Plots
+using PyPlot
+rc("font", family="Times New Roman")
+rc("mathtext", fontset="cm")
+rc("font", size=10)
 # Lattice vector. Notice that lattice vectors are stored by column.
 lat = [1.0 0.5 0.0; 0.0 (√3)/2 0.0; 0.0 0.0 1.0]
 # Reduced positions of orbits. Notice that positions are stored by column.
@@ -17,15 +20,15 @@ sethopping!(graphene, 2, 1, [1, 0, 0], -1.0) # ⟨2|H|(1, 0, 0)1⟩=-1
 sethopping!(graphene, 2, 1, [0, 1, 0], -1.0) # ⟨2|H|(0, 1, 0)1⟩=-1
 
 kdist, egvals = calband(graphene, [1 0; 0 1; 0 0], 100)
-
-plot(kdist, egvals', label=["",""], lw=2, color=:black, dpi=400,
-    xaxis=(raw"$k$", font(15, "sans-serif")),
-    yaxis=("E(eV)", font(15, "sans-serif")),
-    xticks=[],
-    size=(400, 300)
-    )
-savefig("bands.png")
+figure(figsize=(3, 2.5))
+plot(kdist, egvals[1, :], "k")
+plot(kdist, egvals[2, :], "k")
+xlabel("")
+xticks([])
+ylabel("E(eV)")
+tight_layout()
+savefig("band.png", dpi=500)
 ```
 output figure:
 
-![graphene](https://i.imgur.com/E6Yg6Nx.png)
+![graphene](https://i.imgur.com/0MkWNr6.png)
