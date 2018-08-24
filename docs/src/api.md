@@ -16,4 +16,5 @@ calband
 ```@docs
 Hop.Floquet.cal_floquet_hamiltonian
 Hop.Floquet.cal_illuminated_hamiltonian
+Hop.Floquet.cal_illuminated_band
 ```
