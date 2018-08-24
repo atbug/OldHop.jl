@@ -2,8 +2,10 @@ language: julia
 julia:
  - 1.0
 after_success:
- - julia -e 'using Pkg; import Hop; cd(dirname(dirname(pathof(Hop)));
-   Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+ - >
+    julia -e 'using Pkg; import Hop; cd(dirname(dirname(pathof(Hop)));
+    Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
  - julia -e 'using Pkg; Pkg.add("Documenter")'
- - julia -e 'using Pkg; import Hop; cd(dirname(dirname(pathof(Hop)));
-   include(joinpath("docs", "make.jl"))'
+ - >
+    julia -e 'using Pkg; import Hop; cd(dirname(dirname(pathof(Hop)));
+    include(joinpath("docs", "make.jl"))'
