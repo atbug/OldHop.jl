@@ -1,7 +1,7 @@
 module Floquet
 using ..Hop, LinearAlgebra
 
-export cal_floquet_hamiltonian, cal_illuminated_hamiltonian
+export cal_floquet_hamiltonian, cal_illuminated_hamiltonian, cal_illuminated_band
 
 """
 ```julia
@@ -41,8 +41,8 @@ end
 
 """
 ```julia
-cal_illuminated_hamiltonian(t::TightBindingModel, A::Vector{<:Number}, Ω::Real,
-    k::Vector{<:Real}, N::Integer) --> Matrix{ComplexF64}
+cal_illuminated_hamiltonian(t::TightBindingModel, k::Vector{<:Real}; A::Vector{<:Number},
+    Ω::Real, N::Integer=2) --> Matrix{ComplexF64}
 ```
 
 Calculate Floquet Hamiltonian of `t` at `k` point under the illumination of light with frequency Ω.
@@ -51,7 +51,8 @@ into account. The parameter `A` looks like ``[A_x, A_y, A_z]`` denoting vector p
 ``A(t)=[A_x, A_y, A_z]e^{iΩt}+c.c.``. Floquet Hamiltonian is truncated
 up to `N` harmonics.
 """
-function  cal_illuminated_hamiltonian(t::TightBindingModel, A::Vector{<:Number}, Ω::Real, k::Vector{<:Real}, N::Integer)
+function  cal_illuminated_hamiltonian(t::TightBindingModel, k::Vector{<:Real}; A::Vector{<:Number},
+    Ω::Real, N::Integer=2)
     @assert length(A) == 3 "Length of A is not correct."
 
     H0 = calhamiltonian(t, k)
@@ -69,11 +70,50 @@ function  cal_illuminated_hamiltonian(t::TightBindingModel, A::Vector{<:Number},
             end
         end
         H1 += exp(2π*im*(k⋅R))*Peierlshopping
-        println(R)
-        println(Peierlshopping)
     end
-    println(H1)
-    return calfloquethamiltonian([convert(Array, H0), H1], Ω, N)
+    return cal_floquet_hamiltonian([convert(Array, H0), H1], Ω, N)
+end
+
+
+"""
+```julia
+cal_illuminated_band(t::TightBindingModel; A::Vector{<:Number}, Ω::Real,
+    kpath::Matrix{<:Real}, N::Integer=2, ndiv::Int64=100) --> (Vector{Float64}, Matrix{Float64})
+```
+
+Calculate bands of `t` under the illumination of light with frequency Ω.
+`kpath` is a (3, x) size matrix where x is an even number and
+should be provided in reduced coordinates. Peierls substitution is performed to
+the lowest order. Only electric field is taken
+into account. The parameter `A` looks like ``[A_x, A_y, A_z]`` denoting vector potential
+``A(t)=[A_x, A_y, A_z]e^{iΩt}+c.c.``. Floquet Hamiltonian is truncated
+up to `N` harmonics.
+
+This function returns (`kdist`, `egvals`). `kdist` is the distance of k points and
+`egvals` is the Floquet energies of band stored in column at each k.
+"""
+function cal_illuminated_band(t::TightBindingModel; A::Vector{<:Number}, Ω::Real,
+    kpath::Matrix{<:Real}, N::Integer=2, ndiv::Int64=100)
+    @assert iseven(size(kpath, 2))
+    npaths = size(kpath, 2)÷2
+    nkpts = ndiv*npaths
+    kdist = zeros(nkpts)
+    egvals = zeros(t.norbits*(2N+1), nkpts)
+    for ipath = 1:npaths
+        dk = (kpath[:, 2*ipath]-kpath[:, 2*ipath-1])/(ndiv-1)
+        dkn = norm(t.rlat*dk) # real norm of dk
+        if ipath == 1
+            kdist0 = 0
+        else
+            kdist0 = kdist[(ipath-1)*ndiv]
+        end
+        for ikpt = 1:ndiv
+            kdist[(ipath-1)*ndiv+ikpt] = dkn*(ikpt-1) + kdist0
+            k = kpath[:, 2*ipath-1]+dk*(ikpt-1)
+            egvals[:, (ipath-1)*ndiv+ikpt] = eigvals(cal_illuminated_hamiltonian(t, k, A=A, Ω=Ω, N=N))
+        end
+    end
+    return (kdist, egvals)
 end
 
 end
