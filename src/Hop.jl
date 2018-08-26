@@ -133,7 +133,8 @@ function calhamiltonian(t::TightBindingModel, k::Vector{<:Real})
     for (R, hopping) = t.hoppings
         h += exp(2π*im*(k⋅R))*hopping
     end
-    return Hermitian(h)
+    @assert ishermitian(h)
+    return h
 end
 
 
@@ -151,7 +152,7 @@ Eigenvectors are stored in columns and eigenvalues are sorted from small to larg
 function caleig(t::TightBindingModel, k::Vector{<:Real})
     @assert size(k) == (3,) "Size of k is not correct."
     hamiltonian = calhamiltonian(t, k)
-    egvals, egvecs = eigen(hamiltonian)
+    egvals, egvecs = eigen(Hermitian(hamiltonian))
     perm = sortperm(egvals)
     return (egvals[perm], egvecs[:, perm])
 end
@@ -170,7 +171,7 @@ Eigenvalues are sorted from small to large.
 function caleigvals(t::TightBindingModel, k::Vector{<:Real})
     @assert size(k) == (3,) "Size of k is not correct."
     hamiltonian = calhamiltonian(t, k)
-    return sort(eigvals(hamiltonian))
+    return sort(eigvals(Hermitian(hamiltonian)))
 end
 
 

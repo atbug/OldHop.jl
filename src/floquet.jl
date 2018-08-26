@@ -36,7 +36,8 @@ function cal_floquet_hamiltonian(Hs::Vector{Matrix{T}}, Ω::Real, N::Integer) wh
             end
         end
     end
-    return Hermitian(HF)
+    @assert ishermitian(HF)
+    return HF
 end
 
 
@@ -72,7 +73,7 @@ function  cal_illuminated_hamiltonian(t::TightBindingModel, k::Vector{<:Real}; A
         end
         H1 += exp(2π*im*(k⋅R))*Peierlshopping
     end
-    return cal_floquet_hamiltonian([convert(Array, H0), H1], Ω, N)
+    return cal_floquet_hamiltonian([H0, H1], Ω, N)
 end
 
 
@@ -111,7 +112,9 @@ function cal_illuminated_band(t::TightBindingModel; A::Vector{<:Number}, Ω::Rea
         for ikpt = 1:ndiv
             kdist[(ipath-1)*ndiv+ikpt] = dkn*(ikpt-1) + kdist0
             k = kpath[:, 2*ipath-1]+dk*(ikpt-1)
-            egvals[:, (ipath-1)*ndiv+ikpt] = eigvals(cal_illuminated_hamiltonian(t, k, A=A, Ω=Ω, N=N))
+            egvals[:, (ipath-1)*ndiv+ikpt] = eigvals(
+                Hermitian(cal_illuminated_hamiltonian(t, k, A=A, Ω=Ω, N=N))
+            )
         end
     end
     return (kdist, egvals)
