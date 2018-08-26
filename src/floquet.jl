@@ -89,19 +89,22 @@ end
 
 """
 ```julia
-get_floquet_occupation(f::FloquetHamiltonian; Γ::Real=1.0, μ::Real=0.0) --> Vector{Float64}
+get_floquet_occupation(f::FloquetHamiltonian; Γ::Real=1.0, μ::Real=0.0,
+    atol::Real=1.0e-3) --> Vector{Float64}
 ```
 
 Calculate occupation number of `f` assuming coupling to a heat bath with coupling
-constant `Γ`. Chemical potential of the heat bath is `μ`. 
+constant `Γ`. Chemical potential of the heat bath is `μ`. `atol` is the integration
+absolute tolerance.
 """
-function get_floquet_occupation(f::FloquetHamiltonian; Γ::Real=1.0, μ::Real=0.0)
+function get_floquet_occupation(f::FloquetHamiltonian; Γ::Real=1.0, μ::Real=0.0,
+    atol::Real=1.0e-3)
     _, egvecs = eigen(f.Hf)
     occs = zeros(f.nstates)
     for i=(f.harmonics_cutoff*f.nstates+1):(f.harmonics_cutoff+1)*f.nstates
         occ = -im*quadgk(
         ω->egvecs[:, i]'*get_floquet_Gless(f, ω, Γ=Γ, μ=μ)*egvecs[:, i],
-        -Inf, Inf)[1]/(2π)
+        -Inf, Inf, atol=atol)[1]/(2π)
         @assert imag(occ) < 1.0e-6
         occs[i-f.harmonics_cutoff*f.nstates] = real(occ)
     end
