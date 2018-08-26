@@ -14,7 +14,8 @@ calband
 ## Hop.Floquet
 
 ```@docs
-Hop.Floquet.cal_floquet_hamiltonian
-Hop.Floquet.cal_illuminated_hamiltonian
-Hop.Floquet.cal_illuminated_band
+Hop.Floquet.FloquetHamiltonian
+Hop.Floquet.get_floquet_occupation
+Hop.Floquet.get_illuminated_hamiltonian
+Hop.Floquet.get_illuminated_band
 ```
