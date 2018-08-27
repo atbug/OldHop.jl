@@ -132,7 +132,7 @@
 <li><code>positions::Matrix{Float64}</code>: position of orbits in reduced coordinate stored in columns.</li>
 <li><code>hoppings::Dict{SVector{3,Int64},Matrix{ComplexF64}}</code>: hoppings stored as  R-&gt;⟨0m|H|Rn⟩.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/173f289afc3c445567119885cc0908b7be60fa09/src/Hop.jl#L23-L49' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/9bf4669814b6fc469f209c6c4b88e39c927724ac/src/Hop.jl#L23-L49' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.KPath' href='#Hop.KPath'>#</a>
 <strong><code>Hop.KPath</code></strong> &mdash; <em>Type</em>.</p>
 <pre class="codehilite"><code class="language-julia">KPath(rlat::Matrix{&lt;:Real}, nodes::Matrix{&lt;:Real}, ndiv::Int64)</code></pre>
@@ -154,7 +154,7 @@
 <li><code>ndiv::Int64</code>: see explanations above.</li>
 <li><code>nkpts::Int64</code>: number of k points on the path.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/173f289afc3c445567119885cc0908b7be60fa09/src/Hop.jl#L189-L208' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/9bf4669814b6fc469f209c6c4b88e39c927724ac/src/Hop.jl#L189-L208' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.sethopping!' href='#Hop.sethopping!'>#</a>
 <strong><code>Hop.sethopping!</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">sethopping!(t::TightBindingModel, m::Int64, n::Int64, R, hopping;
@@ -162,14 +162,14 @@
 
 
 <p>Set ⟨0m|H|Rn⟩ to <code>hopping</code>. <code>hopping::Number</code> for spinless models and <code>hopping::Matrix{&lt;:Number}</code> for spinful models. For spinful models, <code>size(hopping)</code> should be (2, 2) and the basis for <code>hopping</code> is (|↑⟩, |↓⟩). <code>mode</code> has two possible values: :a for add mode and :s for set or reset mode.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/173f289afc3c445567119885cc0908b7be60fa09/src/Hop.jl#L72-L82' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/9bf4669814b6fc469f209c6c4b88e39c927724ac/src/Hop.jl#L72-L82' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.gethamiltonian' href='#Hop.gethamiltonian'>#</a>
 <strong><code>Hop.gethamiltonian</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">gethamiltonian(t::TightBindingModel, k::Vector{&lt;:Real}) --&gt; Matrix{ComplexF64}</code></pre>
 
 
 <p>Calculate Hamiltonian of a TightBindingModel t for a specific k point. k should be provided in reduced coordinate.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/173f289afc3c445567119885cc0908b7be60fa09/src/Hop.jl#L123-L130' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/9bf4669814b6fc469f209c6c4b88e39c927724ac/src/Hop.jl#L123-L130' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.geteig' href='#Hop.geteig'>#</a>
 <strong><code>Hop.geteig</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">geteig(t::TightBindingModel, k::Vector{&lt;:Real})</code></pre>
@@ -178,7 +178,7 @@
 <p>Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coordinate.</p>
 <p><strong>Return</strong></p>
 <p><code>(egvals::Vector{Float64}, egvecs::Matrix{ComplexF64})</code>, Eigenvectors are stored in columns and eigenvalues are sorted from small to large.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/173f289afc3c445567119885cc0908b7be60fa09/src/Hop.jl#L142-L152' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/9bf4669814b6fc469f209c6c4b88e39c927724ac/src/Hop.jl#L142-L152' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.geteigvals' href='#Hop.geteigvals'>#</a>
 <strong><code>Hop.geteigvals</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">geteigvals(t::TightBindingModel, k::Vector{&lt;:Real})
@@ -187,7 +187,7 @@
 
 <p>Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coordinate.</p>
 <p>Eigenvalues are sorted from small to large.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/173f289afc3c445567119885cc0908b7be60fa09/src/Hop.jl#L162-L171' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/9bf4669814b6fc469f209c6c4b88e39c927724ac/src/Hop.jl#L162-L171' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.getband' href='#Hop.getband'>#</a>
 <strong><code>Hop.getband</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">getband(t::TightBindingModel, kp::KPath)
@@ -196,7 +196,7 @@
 
 <p>Calculate bands of <code>t</code> on <code>kp</code>.</p>
 <p>Return energies at each k point stored in columns.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/173f289afc3c445567119885cc0908b7be60fa09/src/Hop.jl#L237-L246' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/9bf4669814b6fc469f209c6c4b88e39c927724ac/src/Hop.jl#L237-L246' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.Floquet-1'></a></p>
 <h2 id="hopfloquet">Hop.Floquet</h2>
 <p><a id='Hop.Floquet.FloquetHamiltonian' href='#Hop.Floquet.FloquetHamiltonian'>#</a>
@@ -218,7 +218,7 @@
 <li><code>nfstates::Int64</code> is number of Floquet states.</li>
 <li><code>harmonics_cutoff::Int64</code>, see above explanations.</li>
 </ul>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/173f289afc3c445567119885cc0908b7be60fa09/src/floquet.jl#L21-L47' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/9bf4669814b6fc469f209c6c4b88e39c927724ac/src/floquet.jl#L21-L47' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.Floquet.get_floquet_occupation' href='#Hop.Floquet.get_floquet_occupation'>#</a>
 <strong><code>Hop.Floquet.get_floquet_occupation</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">get_floquet_occupation(f::FloquetHamiltonian; Γ::Real=1.0, μ::Real=0.0,
@@ -226,7 +226,7 @@
 
 
 <p>Calculate occupation number of <code>f</code> assuming coupling to a heat bath with coupling constant <code>Γ</code>. Chemical potential of the heat bath is <code>μ</code>. <code>atol</code> is the integration absolute tolerance.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/173f289afc3c445567119885cc0908b7be60fa09/src/floquet.jl#L90-L99' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/9bf4669814b6fc469f209c6c4b88e39c927724ac/src/floquet.jl#L90-L99' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.Floquet.get_illuminated_hamiltonian' href='#Hop.Floquet.get_illuminated_hamiltonian'>#</a>
 <strong><code>Hop.Floquet.get_illuminated_hamiltonian</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">get_illuminated_hamiltonian(t::TightBindingModel, k::Vector{&lt;:Real};
@@ -235,7 +235,7 @@
 
 
 <p>Calculate Floquet Hamiltonian of <code>t</code> at <code>k</code> point under the illumination of light with frequency Ω. Peierls substitution is performed to the lowest order. Only electric field is taken into account. The parameter <code>A</code> looks like $[A_x, A_y, A_z]$ denoting vector potential $A(t)=[A_x, A_y, A_z]e^{-iΩt}+c.c.$. Floquet Hamiltonian is truncated up to <code>harmonics_cutoff</code> harmonics.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/173f289afc3c445567119885cc0908b7be60fa09/src/floquet.jl#L115-L127' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/9bf4669814b6fc469f209c6c4b88e39c927724ac/src/floquet.jl#L115-L127' class='documenter-source'>source</a><br></p>
 <p><a id='Hop.Floquet.get_illuminated_band' href='#Hop.Floquet.get_illuminated_band'>#</a>
 <strong><code>Hop.Floquet.get_illuminated_band</code></strong> &mdash; <em>Function</em>.</p>
 <pre class="codehilite"><code class="language-julia">function get_illuminated_band(t::TightBindingModel; A::Vector{&lt;:Number}, Ω::Real,
@@ -244,7 +244,7 @@
 
 <p>Calculate bands of <code>t</code> on <code>kp</code> under the illumination of light with frequency Ω. Peierls substitution is performed to the lowest order. Only electric field is taken into account. The parameter <code>A</code> looks like $[A_x, A_y, A_z]$ denoting vector potential $A(t)=[A_x, A_y, A_z]e^{-iΩt}+c.c.$. Floquet Hamiltonian is truncated up to <code>harmonics_cutoff</code> harmonics.</p>
 <p>This function returns Floquet band energies at each k stored in column.</p>
-<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/173f289afc3c445567119885cc0908b7be60fa09/src/floquet.jl#L153-L166' class='documenter-source'>source</a><br></p>
+<p><a target='_blank' href='https://github.com/mistguy/Hop.jl/blob/9bf4669814b6fc469f209c6c4b88e39c927724ac/src/floquet.jl#L153-L166' class='documenter-source'>source</a><br></p>
               
             </div>
           </div>
