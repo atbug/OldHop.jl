@@ -6,13 +6,7 @@ let
 end
 
 let
-    lat = [1.0 0.5 0.0; 0.0 (√3)/2 0.0; 0.0 0.0 1.0]
-    positions = [1/3 2/3; 1/3 2/3; 0.0 0.0]
-    graphene = TightBindingModel(lat, positions)
-    sethopping!(graphene, 1, 2, [0, 0, 0], -1.0) # ⟨1|H|(0, 0, 0)2⟩=-1
-    sethopping!(graphene, 2, 1, [1, 0, 0], -1.0) # ⟨2|H|(1, 0, 0)1⟩=-1
-    sethopping!(graphene, 2, 1, [0, 1, 0], -1.0) # ⟨2|H|(0, 1, 0)1⟩=-1
-
+    graphene = getgraphene()
     A = [1.0, 0.0, 0.0]
     Ω = 1.0
     Γ = 1.0
@@ -22,15 +16,9 @@ let
 end
 
 let
-    lat = [1.0 0.5 0.0; 0.0 (√3)/2 0.0; 0.0 0.0 1.0]
-    positions = [1/3 2/3; 1/3 2/3; 0.0 0.0]
-    graphene = TightBindingModel(lat, positions)
-    sethopping!(graphene, 1, 2, [0, 0, 0], -1.0) # ⟨1|H|(0, 0, 0)2⟩=-1
-    sethopping!(graphene, 2, 1, [1, 0, 0], -1.0) # ⟨2|H|(1, 0, 0)1⟩=-1
-    sethopping!(graphene, 2, 1, [0, 1, 0], -1.0) # ⟨2|H|(0, 1, 0)1⟩=-1
-
-    kp = KPath(graphene.rlat, [1 0; 0 1; 0 0], 100)
+    graphene = getgraphene()
+    kp = KPath(graphene.rlat, [1 0; 0 1; 0 0], 10)
     bands = Hop.Floquet.get_illuminated_band(graphene, A=[1.0, 0.0, 0.0],
         Ω=1.0, kp=kp, harmonics_cutoff=5)
-    @test bands[21, 42] ≈ 5.626495 atol=1.0e-6
+    @test bands[21, 4] ≈ 5.589253 atol=1.0e-6
 end
