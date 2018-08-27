@@ -125,7 +125,7 @@ sethopping!(graphene, 1, 2, [0, 0, 0], -1.0) # ⟨1|H|(0, 0, 0)2⟩=-1
 sethopping!(graphene, 2, 1, [1, 0, 0], -1.0) # ⟨2|H|(1, 0, 0)1⟩=-1
 sethopping!(graphene, 2, 1, [0, 1, 0], -1.0) # ⟨2|H|(0, 1, 0)1⟩=-1
 
-kdist, egvals = calband(graphene, [1 0; 0 1; 0 0], 100)
+kdist, egvals = getband(graphene, [1 0; 0 1; 0 0], 100)
 figure(figsize=(3, 2.5))
 plot(kdist, egvals[1, :], &quot;k&quot;)
 plot(kdist, egvals[2, :], &quot;k&quot;)
