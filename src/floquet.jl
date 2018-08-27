@@ -129,9 +129,9 @@ function  get_illuminated_hamiltonian(t::TightBindingModel, k::Vector{<:Real};
     A::Vector{<:Number}, Ω::Real, harmonics_cutoff::Integer=2)
     @assert length(A) == 3 "Length of A is not correct."
 
-    H0 = calhamiltonian(t, k)
+    H0 = gethamiltonian(t, k)
 
-    # Unfortunately we cannot calculate Hamiltonian by calhamiltonian since
+    # Unfortunately we cannot calculate Hamiltonian by gethamiltonian since
     # H1 is not necessarily Hermitian.
     cpositions = t.lat*t.positions # Cartesian positions
     H1 = zeros(ComplexF64, size(H0))

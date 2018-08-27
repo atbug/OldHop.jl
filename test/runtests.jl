@@ -16,10 +16,10 @@ let
         0.0 0.0 2π;
     ]
 
-    @test caleigvals(graphene, [0.0, 0.0, 0.0]) ≈ [-3.0, 3.0]
-    @test calhamiltonian(graphene, [0.0, 0.0, 0.0])*caleig(graphene, [0.0, 0.0, 0.0])[2][:, 1] ≈
-        -3.0*caleig(graphene, [0.0, 0.0, 0.0])[2][:, 1]
-    kdist, egvals = calband(graphene, [1 0; 0 1; 0 0], 3)
+    @test geteigvals(graphene, [0.0, 0.0, 0.0]) ≈ [-3.0, 3.0]
+    @test gethamiltonian(graphene, [0.0, 0.0, 0.0])*geteig(graphene, [0.0, 0.0, 0.0])[2][:, 1] ≈
+        -3.0*geteig(graphene, [0.0, 0.0, 0.0])[2][:, 1]
+    kdist, egvals = getband(graphene, [1 0; 0 1; 0 0], 3)
     @test kdist ≈ [0, 2π, 4π]
     @test egvals ≈ [-3.0 -1.0 -3.0; 3.0 1.0 3.0]
 end
@@ -46,7 +46,7 @@ let    # Kane-Mele
     sethopping!(tm, 2, 2, [0, 1, 0], im*so*σ3)
     sethopping!(tm, 2, 2, [1, 0, 0], -im*so*σ3)
     sethopping!(tm, 2, 2, [1, -1, 0], im*so*σ3)
-    @test caleigvals(tm, [2/3, 1/3, 0.0]) ≈ [-2.55885, -0.558846, 0.558846, 2.55885] atol=1.0e-5
+    @test geteigvals(tm, [2/3, 1/3, 0.0]) ≈ [-2.55885, -0.558846, 0.558846, 2.55885] atol=1.0e-5
 end
 
 include("floquet.jl")

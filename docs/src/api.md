@@ -5,10 +5,10 @@
 ```@docs
 TightBindingModel
 sethopping!
-calhamiltonian
-caleig
-caleigvals
-calband
+gethamiltonian
+geteig
+geteigvals
+getband
 ```
 
 ## Hop.Floquet

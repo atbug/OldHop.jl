@@ -2,7 +2,7 @@ module Hop
 using StaticArrays, LinearAlgebra
 
 export TightBindingModel, sethopping!,
-    calhamiltonian, caleig, caleigvals, calband
+    gethamiltonian, geteig, geteigvals, getband
 
 
 struct TightBindingModel
@@ -121,13 +121,13 @@ end
 
 """
 ```julia
-calhamiltonian(t::TightBindingModel, k::Vector{<:Real}) --> Matrix{ComplexF64}
+gethamiltonian(t::TightBindingModel, k::Vector{<:Real}) --> Matrix{ComplexF64}
 ```
 
 Calculate Hamiltonian of a TightBindingModel t for a specific k point. k should
 be provided in reduced coordinate.
 """
-function calhamiltonian(t::TightBindingModel, k::Vector{<:Real})
+function gethamiltonian(t::TightBindingModel, k::Vector{<:Real})
     @assert size(k) == (3,) "Size of k is not correct."
     h = zeros(ComplexF64, (t.norbits, t.norbits))
     for (R, hopping) = t.hoppings
@@ -140,7 +140,7 @@ end
 
 """
 ```julia
-caleig(t::TightBindingModel, k::Vector{<:Real})
+geteig(t::TightBindingModel, k::Vector{<:Real})
 ```
 
 Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coordinate.
@@ -149,9 +149,9 @@ Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coo
 `(egvals::Vector{Float64}, egvecs::Matrix{ComplexF64})`,
 Eigenvectors are stored in columns and eigenvalues are sorted from small to large.
 """
-function caleig(t::TightBindingModel, k::Vector{<:Real})
+function geteig(t::TightBindingModel, k::Vector{<:Real})
     @assert size(k) == (3,) "Size of k is not correct."
-    hamiltonian = calhamiltonian(t, k)
+    hamiltonian = gethamiltonian(t, k)
     egvals, egvecs = eigen(Hermitian(hamiltonian))
     perm = sortperm(egvals)
     return (egvals[perm], egvecs[:, perm])
@@ -160,7 +160,7 @@ end
 
 """
 ```julia
-caleigvals(t::TightBindingModel, k::Vector{<:Real})
+geteigvals(t::TightBindingModel, k::Vector{<:Real})
   --> Vector{Float64}
 ```
 
@@ -168,16 +168,16 @@ Calculate eigenvalues and eigenvectors of t. k should be provided in reduced coo
 
 Eigenvalues are sorted from small to large.
 """
-function caleigvals(t::TightBindingModel, k::Vector{<:Real})
+function geteigvals(t::TightBindingModel, k::Vector{<:Real})
     @assert size(k) == (3,) "Size of k is not correct."
-    hamiltonian = calhamiltonian(t, k)
+    hamiltonian = gethamiltonian(t, k)
     return sort(eigvals(Hermitian(hamiltonian)))
 end
 
 
 """
 ```julia
-calband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64)
+getband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64)
     --> (Vector{Float64}, Matrix{Float64})
 ```
 
@@ -186,7 +186,7 @@ should be provided in reduced coordinates.
 This function returns (`kdist`, `egvals`). `kdist` is the distance of k points and
 `egvals` is the energies of band stored in column at each k.
 """
-function calband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64)
+function getband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64)
     @assert iseven(size(kpath, 2))
     npaths = size(kpath, 2)÷2
     nkpts = ndiv*npaths
@@ -203,7 +203,7 @@ function calband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64)
         for ikpt = 1:ndiv
             kdist[(ipath-1)*ndiv+ikpt] = dkn*(ikpt-1) + kdist0
             k = kpath[:, 2*ipath-1]+dk*(ikpt-1)
-            egvals[:, (ipath-1)*ndiv+ikpt] = caleigvals(t, k)
+            egvals[:, (ipath-1)*ndiv+ikpt] = geteigvals(t, k)
         end
     end
     return (kdist, egvals)
