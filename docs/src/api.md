@@ -4,6 +4,7 @@
 
 ```@docs
 TightBindingModel
+KPath
 sethopping!
 gethamiltonian
 geteig

@@ -153,45 +153,26 @@ end
 """
 ```julia
 function get_illuminated_band(t::TightBindingModel; A::Vector{<:Number}, Ω::Real,
-    kpath::Matrix{<:Real}, harmonics_cutoff::Integer=2, ndiv::Int64=100)
-    --> (Vector{Float64}, Matrix{Float64})
+    kp::KPath, harmonics_cutoff::Integer=2) --> Matrix{Float64}
 ```
 
-Calculate bands of `t` under the illumination of light with frequency Ω.
-`kpath` is a (3, x) size matrix where x is an even number and
-should be provided in reduced coordinates. Peierls substitution is performed to
-the lowest order. Only electric field is taken
+Calculate bands of `t` on `kp` under the illumination of light with frequency Ω.
+Peierls substitution is performed to the lowest order. Only electric field is taken
 into account. The parameter `A` looks like ``[A_x, A_y, A_z]`` denoting vector potential
 ``A(t)=[A_x, A_y, A_z]e^{-iΩt}+c.c.``. Floquet Hamiltonian is truncated
 up to `harmonics_cutoff` harmonics.
 
-This function returns (`kdist`, `egvals`). `kdist` is the distance of k points and
-`egvals` is the Floquet energies of band stored in column at each k.
+This function returns Floquet band energies at each k stored in column.
 """
 function get_illuminated_band(t::TightBindingModel; A::Vector{<:Number}, Ω::Real,
-    kpath::Matrix{<:Real}, harmonics_cutoff::Integer=2, ndiv::Int64=100)
-    @assert iseven(size(kpath, 2))
-    npaths = size(kpath, 2)÷2
-    nkpts = ndiv*npaths
-    kdist = zeros(nkpts)
-    egvals = zeros(t.norbits*(2harmonics_cutoff+1), nkpts)
-    for ipath = 1:npaths
-        dk = (kpath[:, 2*ipath]-kpath[:, 2*ipath-1])/(ndiv-1)
-        dkn = norm(t.rlat*dk) # real norm of dk
-        if ipath == 1
-            kdist0 = 0
-        else
-            kdist0 = kdist[(ipath-1)*ndiv]
-        end
-        for ikpt = 1:ndiv
-            kdist[(ipath-1)*ndiv+ikpt] = dkn*(ikpt-1) + kdist0
-            k = kpath[:, 2*ipath-1]+dk*(ikpt-1)
-            egvals[:, (ipath-1)*ndiv+ikpt] = eigvals(
-                get_illuminated_hamiltonian(t, k, A=A, Ω=Ω, harmonics_cutoff=harmonics_cutoff).Hf
-            )
-        end
+    kp::KPath, harmonics_cutoff::Integer=2)
+    bands = zeros(t.norbits*(2harmonics_cutoff+1), kp.nkpts)
+    for ik=1:kp.nkpts
+        bands[:, ik] = eigvals(
+            get_illuminated_hamiltonian(t, kp.kpts[:, ik], A=A, Ω=Ω, harmonics_cutoff=harmonics_cutoff).Hf
+        )
     end
-    return (kdist, egvals)
+    return bands
 end
 
 fermi(E, μ; T=0) = E<μ ? 1.0 : 0.0

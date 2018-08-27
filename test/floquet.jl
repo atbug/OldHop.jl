@@ -29,9 +29,8 @@ let
     sethopping!(graphene, 2, 1, [1, 0, 0], -1.0) # ⟨2|H|(1, 0, 0)1⟩=-1
     sethopping!(graphene, 2, 1, [0, 1, 0], -1.0) # ⟨2|H|(0, 1, 0)1⟩=-1
 
-    kdist, egvals = Hop.Floquet.get_illuminated_band(graphene, A=[1.0, 0.0, 0.0],
-        Ω=1.0, kpath=[1 0; 0 1; 0 0], harmonics_cutoff=5, ndiv=100)
-
-    @test kdist[42] ≈ 5.204254 atol=1.0e-6
-    @test egvals[21, 42] ≈ 5.626495 atol=1.0e-6
+    kp = KPath(graphene.rlat, [1 0; 0 1; 0 0], 100)
+    bands = Hop.Floquet.get_illuminated_band(graphene, A=[1.0, 0.0, 0.0],
+        Ω=1.0, kp=kp, harmonics_cutoff=5)
+    @test bands[21, 42] ≈ 5.626495 atol=1.0e-6
 end

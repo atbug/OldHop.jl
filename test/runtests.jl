@@ -19,9 +19,10 @@ let
     @test geteigvals(graphene, [0.0, 0.0, 0.0]) ≈ [-3.0, 3.0]
     @test gethamiltonian(graphene, [0.0, 0.0, 0.0])*geteig(graphene, [0.0, 0.0, 0.0])[2][:, 1] ≈
         -3.0*geteig(graphene, [0.0, 0.0, 0.0])[2][:, 1]
-    kdist, egvals = getband(graphene, [1 0; 0 1; 0 0], 3)
-    @test kdist ≈ [0, 2π, 4π]
-    @test egvals ≈ [-3.0 -1.0 -3.0; 3.0 1.0 3.0]
+    kp = KPath(graphene.rlat, [1 0 1 0; 0 1 0 1; 0 0 0 0], 3)
+    bands = getband(graphene, kp)
+    @test kp.distances ≈ [0, 2π, 4π, 4π, 6π, 8π]
+    @test bands[:, 1:3] ≈ [-3.0 -1.0 -3.0; 3.0 1.0 3.0]
 end
 
 let    # Kane-Mele

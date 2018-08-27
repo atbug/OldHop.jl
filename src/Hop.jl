@@ -2,7 +2,8 @@ module Hop
 using StaticArrays, LinearAlgebra
 
 export TightBindingModel, sethopping!,
-    gethamiltonian, geteig, geteigvals, getband
+    gethamiltonian, geteig, geteigvals,
+    KPath, getband
 
 
 struct TightBindingModel
@@ -175,38 +176,80 @@ function geteigvals(t::TightBindingModel, k::Vector{<:Real})
 end
 
 
+struct KPath
+    rlat::Matrix{Float64}
+    nodes::Matrix{Float64}
+    distances::Vector{Float64}
+    kpts::Matrix{Float64}
+    ndiv::Int64
+    nkpts::Int64
+end
+
+
 """
 ```julia
-getband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64)
-    --> (Vector{Float64}, Matrix{Float64})
+KPath(rlat::Matrix{<:Real}, nodes::Matrix{<:Real}, ndiv::Int64)
 ```
 
-Calculate bands. `kpath` is a (3, x) size matrix where x is an even number and
-should be provided in reduced coordinates.
-This function returns (`kdist`, `egvals`). `kdist` is the distance of k points and
-`egvals` is the energies of band stored in column at each k.
+A path in reciprocal space.
+
+# Constructor Arguments
+ - `rlat`: reciprocal lattice vector stored in columns.
+ - `nodes`: start and end points of the path stored in columns in reduced coordinates.
+ - `ndiv`: number of divisions on each section of the path.
+
+# Fields
+ - `rlat::Matrix{Float64}`: see explanations above.
+ - `nodes::Matrix{Float64}`: see explanations above.
+ - `distances::Vector{Float64}`: distance along the path for each k point.
+ - `kpts::Matrix{Float64}`: k points stored in columns  in reduced coordinates.
+ - `ndiv::Int64`: see explanations above.
+ - `nkpts::Int64`: number of k points on the path.
 """
-function getband(t::TightBindingModel, kpath::Matrix{<:Real}, ndiv::Int64)
-    @assert iseven(size(kpath, 2))
-    npaths = size(kpath, 2)÷2
+function KPath(rlat::Matrix{<:Real}, nodes::Matrix{<:Real}, ndiv::Int64)
+    @assert iseven(size(nodes, 2))
+    npaths = size(nodes, 2)÷2
     nkpts = ndiv*npaths
-    kdist = zeros(nkpts)
-    egvals = zeros(t.norbits, nkpts)
+    distances = zeros(nkpts)
+    kpts = zeros(3, nkpts)
     for ipath = 1:npaths
-        dk = (kpath[:, 2*ipath]-kpath[:, 2*ipath-1])/(ndiv-1)
-        dkn = norm(t.rlat*dk) # real norm of dk
+        dk = (nodes[:, 2*ipath]-nodes[:, 2*ipath-1])/(ndiv-1)
+        dkn = norm(rlat*dk) # real norm of dk
         if ipath == 1
-            kdist0 = 0
+            distance0 = 0
         else
-            kdist0 = kdist[(ipath-1)*ndiv]
+            distance0 = distances[(ipath-1)*ndiv]
         end
         for ikpt = 1:ndiv
-            kdist[(ipath-1)*ndiv+ikpt] = dkn*(ikpt-1) + kdist0
-            k = kpath[:, 2*ipath-1]+dk*(ikpt-1)
-            egvals[:, (ipath-1)*ndiv+ikpt] = geteigvals(t, k)
+            distances[(ipath-1)*ndiv+ikpt] = dkn*(ikpt-1) + distance0
+            kpts[:, (ipath-1)*ndiv+ikpt] = nodes[:, 2*ipath-1]+dk*(ikpt-1)
         end
     end
-    return (kdist, egvals)
+    return KPath(rlat, nodes, distances, kpts, ndiv, nkpts)
+end
+
+
+function Base.show(io::IO, kp::KPath)
+    print(io, "KPath: $(kp.nkpts÷kp.ndiv) line(s).")
+end
+
+
+"""
+```julia
+getband(t::TightBindingModel, kp::KPath)
+    --> Matrix{Float64}
+```
+
+Calculate bands of `t` on `kp`.
+
+Return energies at each k point stored in columns.
+"""
+function getband(t::TightBindingModel, kp::KPath)
+    bands = zeros(t.norbits, kp.nkpts)
+    for ik=1:kp.nkpts
+        bands[:, ik] = geteigvals(t, kp.kpts[:, ik])
+    end
+    return bands
 end
 
 include("floquet.jl")
