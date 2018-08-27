@@ -175,6 +175,17 @@ function get_illuminated_band(t::TightBindingModel; A::Vector{<:Number}, Ω::Rea
     return bands
 end
 
+
+function get_illuminated_occupation(t::TightBindingModel, kp::KPath;
+    Γ::Real, μ::Real, A::Vector{<:Number}, Ω::Real, harmonics_cutoff::Integer, atol::Real=1.0e-3)
+    occs = zeros((t.norbits, kp.nkpts))
+    for ik=1:kp.nkpts
+        f = get_illuminated_hamiltonian(t, kp.kpts[:, ik], A=A, Ω=Ω, harmonics_cutoff=harmonics_cutoff)
+        occs[:, ik] = get_floquet_occupation(f; μ=μ, Γ=Γ, atol=atol)
+    end
+    return occs
+end
+
 fermi(E, μ; T=0) = E<μ ? 1.0 : 0.0
 
 end
